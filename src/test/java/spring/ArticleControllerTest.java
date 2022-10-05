@@ -19,28 +19,24 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.ui.ExtendedModelMap;
 
-import fr.eservices.drive.dao.DataException;
-import fr.eservices.drive.dao.OrderDao;
-import fr.eservices.drive.mock.CartMockDao;
-import fr.eservices.drive.model.Order;
-import fr.eservices.drive.repository.OrderRepository;
-import fr.eservices.drive.web.CartController;
+import fr.eservices.drive.repository.DataException;
+import fr.eservices.drive.web.ArticleController;
 import fr.eservices.drive.web.dto.CartEntry;
 import fr.eservices.drive.web.dto.SimpleResponse.Status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes=CartControllerTest.class)
+@ContextConfiguration(classes= ArticleControllerTest.class)
 @Configuration
 @ComponentScan(basePackageClasses={CartMockDao.class})
-public class CartControllerTest {
+public class ArticleControllerTest {
 	
 	/* **************************************************
 	 * Configure Test context
 	 * **************************************************/
 	
 	@Bean
-	CartController ctrl() {
-		return new CartController();
+	ArticleController ctrl() {
+		return new ArticleController();
 	}
 	
 	@Bean
@@ -51,13 +47,13 @@ public class CartControllerTest {
 	@Bean
 	OrderRepository orderRepository() {
 		return (OrderRepository) Proxy.newProxyInstance(
-			CartControllerTest.class.getClassLoader(), 
+			ArticleControllerTest.class.getClassLoader(),
 			new Class[]{OrderRepository.class},
 			new InvocationHandler() {
 				@Override public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 					if ( "hashCode".equals(method.getName()) ) return 1;
-					if ( CartControllerTest.handler != null ) {
-						CartControllerTest.handler.accept(method.getName(), args);
+					if ( ArticleControllerTest.handler != null ) {
+						ArticleControllerTest.handler.accept(method.getName(), args);
 					} else {
 						System.out.println("null");
 					}
@@ -86,7 +82,7 @@ public class CartControllerTest {
 	CartMockDao cartDao;
 	
 	@Autowired
-	CartController ctrl;
+	ArticleController ctrl;
 	
 	static BiConsumer<String, Object[]> handler;
 	Order saved;

@@ -12,10 +12,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 
-import fr.eservices.drive.repository.OrderRepository;
 import fr.eservices.drive.web.AppConfig;
-import fr.eservices.drive.web.CartController;
-import fr.eservices.drive.web.OrderController;
+import fr.eservices.drive.web.ArticleController;
 
 public class OrderRepositoryTest {
 
@@ -82,7 +80,7 @@ public class OrderRepositoryTest {
 	
 	@Test
 	public void testInjections() {
-		assertTrue( hasFieldTypeAnnotated(CartController.class, OrderRepository.class, Autowired.class) );
+		assertTrue( hasFieldTypeAnnotated(ArticleController.class, OrderRepository.class, Autowired.class) );
 		assertTrue( hasFieldTypeAnnotated(OrderController.class, OrderRepository.class, Autowired.class) );
 	}
 	

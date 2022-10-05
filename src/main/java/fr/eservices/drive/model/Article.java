@@ -1,29 +1,59 @@
 package fr.eservices.drive.model;
 
-public class Article {
-	
-	private String
-		id,
-		name,
-		img,
-		cat_id;
-	
-	private int price;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
-	public String getId() {
+@Entity
+@Inheritance
+public class Article {
+	@Id
+	@GeneratedValue
+	private int id;
+
+	private String ean;
+
+	private double price;
+
+	private double vat;
+
+	private String name;
+
+	private String img;
+
+	@ManyToMany
+	private List<Category> categories = new ArrayList<>();
+
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
-	public int getPrice() {
+	public String getEan() {
+		return ean;
+	}
+
+	public void setEan(String ean) {
+		this.ean = ean;
+	}
+
+	public double getPrice() {
 		return price;
 	}
 
-	public void setPrice(int price) {
+	public void setPrice(double price) {
 		this.price = price;
+	}
+
+	public double getVat() {
+		return vat;
+	}
+
+	public void setVat(double vat) {
+		this.vat = vat;
 	}
 
 	public String getName() {
@@ -41,14 +71,12 @@ public class Article {
 	public void setImg(String img) {
 		this.img = img;
 	}
-	
-	public String getCat_id() {
-		return cat_id;
-	}
-	
-	public void setCat_id(String cat_id) {
-		this.cat_id = cat_id;
+
+	public List<Category> getCategories() {
+		return categories;
 	}
 
-	
+	public void setCategories(List<Category> categories) {
+		this.categories = categories;
+	}
 }
