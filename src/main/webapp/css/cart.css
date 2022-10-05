@@ -1,0 +1,8 @@
+ul.articles li .addToCart {
+	font-size: 25px;
+	background-color: white;
+	margin-left: 85px;
+	color: #5a5;
+	margin-left: 200px;
+	cursor: pointer;
+}

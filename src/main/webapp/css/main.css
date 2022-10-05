@@ -1,0 +1,39 @@
+body {
+	padding-top: 70px;
+}
+
+ul.categories li {
+	float: left;
+	height: 150px;
+	width:  150px;
+	border: solid #CCC 1px;
+	border-radius : 10px;
+	margin: 10px; 
+	padding: 10px;
+	list-style: none;
+	text-align: center;
+}
+
+ul.articles li {
+	float: left;
+	height: 250px;
+	width:  250px;
+	border: solid #CCC 1px;
+	border-radius : 10px;
+	margin: 10px; 
+	padding: 10px;
+	list-style: none;
+	text-align: center;
+}
+
+.articles .price {
+	position: absolute;
+	width: 80px;
+	height: 25px;
+	margin-left: 139px;
+	margin-top: -11px;
+	background-color: white;
+	border : solid #CCC 1px;
+	border-radius:  0 10px 0 10px;
+	color: #A00;
+}
