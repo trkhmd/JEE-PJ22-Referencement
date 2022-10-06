@@ -1,4 +1,4 @@
-package fr.eservices.drive.repository;
+package fr.eservices.drive.dao;
 
 public class DataException extends Exception {
 	private static final long serialVersionUID = 3634318263611299371L;

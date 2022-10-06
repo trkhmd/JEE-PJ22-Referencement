@@ -7,6 +7,11 @@ import java.util.Date;
 
 @Entity
 public class Perishable extends Article {
+    @Temporal(TemporalType.DATE)
+    private Date bestBefore;
+
+    private String lot;
+
     public Date getBestBefore() {
         return bestBefore;
     }
@@ -22,7 +27,4 @@ public class Perishable extends Article {
     public void setLot(String lot) {
         this.lot = lot;
     }
-    @Temporal(TemporalType.DATE)
-    private Date bestBefore;
-    private String lot;
 }

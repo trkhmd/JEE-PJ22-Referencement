@@ -1,43 +1,34 @@
 package fr.eservices.drive.model;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Entity
-@Inheritance
 public class Article {
 	@Id
 	@GeneratedValue
-	private int id;
-
-	private String ean;
-
+	private String id;
+	private String ean13;
 	private double price;
-
-	private double vat;
-
+	private double tva;
 	private String name;
-
 	private String img;
 
-	@ManyToMany
-	private List<Category> categories = new ArrayList<>();
-
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	public String getEan() {
-		return ean;
+	public String getEan13() {
+		return ean13;
 	}
 
-	public void setEan(String ean) {
-		this.ean = ean;
+	public void setEan13(String ean13) {
+		this.ean13 = ean13;
 	}
 
 	public double getPrice() {
@@ -48,12 +39,12 @@ public class Article {
 		this.price = price;
 	}
 
-	public double getVat() {
-		return vat;
+	public double getTva() {
+		return tva;
 	}
 
-	public void setVat(double vat) {
-		this.vat = vat;
+	public void setTva(double tva) {
+		this.tva = tva;
 	}
 
 	public String getName() {
@@ -70,13 +61,5 @@ public class Article {
 
 	public void setImg(String img) {
 		this.img = img;
-	}
-
-	public List<Category> getCategories() {
-		return categories;
-	}
-
-	public void setCategories(List<Category> categories) {
-		this.categories = categories;
 	}
 }

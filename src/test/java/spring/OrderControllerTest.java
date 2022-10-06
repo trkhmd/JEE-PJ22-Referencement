@@ -18,6 +18,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.ui.ExtendedModelMap;
 
+import fr.eservices.drive.mock.CartMockDao;
+import fr.eservices.drive.model.Order;
+import fr.eservices.drive.repository.OrderRepository;
+import fr.eservices.drive.web.OrderController;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes=OrderControllerTest.class)
 @Configuration
@@ -38,7 +43,7 @@ public class OrderControllerTest {
 	@Bean
 	OrderRepository orderRepository() {
 		return (OrderRepository) Proxy.newProxyInstance(
-			ArticleControllerTest.class.getClassLoader(),
+			CartControllerTest.class.getClassLoader(), 
 			new Class[]{OrderRepository.class},
 			new InvocationHandler() {
 				@Override public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
