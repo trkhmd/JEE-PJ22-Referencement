@@ -1,10 +1,9 @@
 package fr.eservices.drive.web;
 
 import fr.eservices.drive.dao.DataException;
-import fr.eservices.drive.model.Article;
+import fr.eservices.drive.model.Product;
 import fr.eservices.drive.repository.ArticleRepository;
-import fr.eservices.drive.repository.StockRepository;
-import fr.eservices.drive.web.dto.ArticleEntry;
+import fr.eservices.drive.web.dto.ProductEntry;
 import fr.eservices.drive.web.dto.SimpleResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,11 +16,11 @@ import java.io.PrintWriter;
 import java.util.List;
 
 @Controller
-@RequestMapping(path="/article")
-public class ArticleController {
+@RequestMapping(path="/product")
+public class ProductController {
 
     @Autowired
-    ArticleRepository<Article> articleRepository;
+    ArticleRepository<Product> productRepository;
 
     @ExceptionHandler(DataException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -37,49 +36,52 @@ public class ArticleController {
     }
 
     @GetMapping()
-    public String getAllArticles(Model model){
-        List<Article> articles = articleRepository.findAll();
-        model.addAttribute("articles", articles);
-        return "all_articles";
+    public String getAllProducts(Model model){
+        List<Product> products = productRepository.findAll();
+        model.addAttribute("product", products);
+        return "all_products";
     }
 
     @GetMapping(path="/{ean13}.html", produces="text/html")
-    public String getArticle(@PathVariable(name="ean13") String ean13, Model model) throws DataException {
-        Article article = articleRepository.findByEan13(ean13);
-        model.addAttribute("article", article);
-        return "_article_info";
+    public String getProduct(@PathVariable(name="ean13") String ean13, Model model) throws DataException {
+        Product product = productRepository.findByEan13(ean13);
+        model.addAttribute("product", product);
+        return "_product_info";
     }
-
 
     @ResponseBody
     @PostMapping(path="/add.json",consumes="application/json")
-    public SimpleResponse add(@RequestBody ArticleEntry artEntry) {
+    public SimpleResponse add(@RequestBody ProductEntry productEntry) {
         SimpleResponse res = new SimpleResponse();
-        if (artEntry.getName() == null || artEntry.getEan13() == null || artEntry.getImg() == null || artEntry.getPrice() <=0 || artEntry.getImg()==null || artEntry.getVat()<= 0){
+        if (productEntry.getName() == null ||
+                productEntry.getEan13() == null ||
+                productEntry.getImg() == null ||
+                productEntry.getPrice() <=0 ||
+                productEntry.getVat()<= 0){
             res.status =  SimpleResponse.Status.ERROR;
             res.message = "Bad request verify entry";
             return res;
         }
 
-        if(articleRepository.findByEan13(artEntry.getEan13()) != null) {
+        if(productRepository.findByEan13(productEntry.getEan13()) != null) {
             res.status =  SimpleResponse.Status.ERROR;
             res.message = "Ean13 is already used";
             return res;
         }
 
-        if(artEntry.getName().length() <3){
+        if(productEntry.getName().length() <3){
             res.status =  SimpleResponse.Status.ERROR;
             res.message = "Name too short";
             return res;
         }
 
-        if(artEntry.getVat()>1){
+        if(productEntry.getVat()>1){
             res.status =  SimpleResponse.Status.ERROR;
             res.message = "Bad Vat";
             return res;
         }
 
-        if (artEntry.getEan13().length() == 13){
+        if (productEntry.getEan13().length() == 13){
             res.status =  SimpleResponse.Status.ERROR;
             res.message = "Bad ean13";
             return res;
@@ -87,34 +89,34 @@ public class ArticleController {
 
         //TODO: check category
 
-        Article article = new Article();
-        article.setPrice(artEntry.getPrice());
-        article.setName(artEntry.getName());
+        Product product = new Product();
+        product.setPrice(productEntry.getPrice());
+        product.setName(productEntry.getName());
         //TODO: add categories
         //article.setCategories(artEntry.getCategories());
-        article.setImg(artEntry.getImg());
-        article.setEan13(artEntry.getEan13());
-        article.setVat(artEntry.getVat());
-        articleRepository.save(article);
-        Article added = articleRepository.findByEan13(artEntry.getEan13());
+        product.setImg(productEntry.getImg());
+        product.setEan13(productEntry.getEan13());
+        product.setVat(productEntry.getVat());
+        productRepository.save(product);
         res.status = SimpleResponse.Status.OK;
-        res.message = "Article Added ean13: " + artEntry.getEan13();
+        res.message = "Article Added";
         return res;
     }
 
     @DeleteMapping(path = "/{ean13}")
     public SimpleResponse delete(@PathVariable String ean13) {
         SimpleResponse res = new SimpleResponse();
-        Article article = articleRepository.findByEan13(ean13);
-        if(article == null) {
+        Product product = productRepository.findByEan13(ean13);
+        if(product == null) {
             res.status = SimpleResponse.Status.ERROR;
-            res.message = "article id not found";
+            res.message = "Product id not found";
             return res;
         }
-        articleRepository.delete(ean13);
+        productRepository.delete(ean13);
         res.status = SimpleResponse.Status.OK;
         res.message = "";
         return res;
     }
 }
+
 

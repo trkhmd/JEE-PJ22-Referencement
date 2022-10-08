@@ -1,5 +1,7 @@
 package fr.eservices.drive.model;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,24 +10,14 @@ import java.util.List;
 @Inheritance
 public class Article {
 	@Id
-	@GeneratedValue
-	private String id;
 	private String ean13;
 	private double price;
-	private double tva;
+	private double vat;
 	private String name;
 	private String img;
 
 	@ManyToMany
 	private List<Category> categories = new ArrayList<>();
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	public String getEan13() {
 		return ean13;
@@ -43,12 +35,12 @@ public class Article {
 		this.price = price;
 	}
 
-	public double getTva() {
-		return tva;
+	public double getVat() {
+		return vat;
 	}
 
-	public void setTva(double tva) {
-		this.tva = tva;
+	public void setVat(double tva) {
+		this.vat = tva;
 	}
 
 	public String getName() {

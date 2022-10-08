@@ -1,7 +1,14 @@
 package fr.eservices.drive.repository;
 
 import fr.eservices.drive.model.Article;
+import fr.eservices.drive.model.Perishable;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 
-public interface ArticleRepository extends CrudRepository<Article,String> {
+import java.util.List;
+
+public interface ArticleRepository<T extends Article> extends CrudRepository<T,String> {
+    T findByEan13(String id);
+    Pageable findAll(Pageable pageable);
+    List<T> findAll();
 }

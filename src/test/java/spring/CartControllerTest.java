@@ -1,27 +1,5 @@
 package spring;
 
-import static org.junit.Assert.*;
-
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.List;
-import java.util.function.BiConsumer;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.ui.ExtendedModelMap;
-
-import fr.eservices.drive.dao.DataException;
-import fr.eservices.drive.web.dto.CartEntry;
-import fr.eservices.drive.web.dto.SimpleResponse.Status;
 /*
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes=CartControllerTest.class)

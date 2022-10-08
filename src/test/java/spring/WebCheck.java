@@ -13,7 +13,6 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import fr.eservices.drive.web.dto.CartEntry;
 import fr.eservices.drive.web.dto.SimpleResponse;
 import web.HtmlUtils;
 import web.WebTool;
