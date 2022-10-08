@@ -12,10 +12,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 
-import fr.eservices.drive.repository.OrderRepository;
 import fr.eservices.drive.web.AppConfig;
-import fr.eservices.drive.web.CartController;
-import fr.eservices.drive.web.OrderController;
 
 public class OrderRepositoryTest {
 

@@ -19,9 +19,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.ui.ExtendedModelMap;
 
 import fr.eservices.drive.mock.CartMockDao;
-import fr.eservices.drive.model.Order;
-import fr.eservices.drive.repository.OrderRepository;
-import fr.eservices.drive.web.OrderController;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes=OrderControllerTest.class)

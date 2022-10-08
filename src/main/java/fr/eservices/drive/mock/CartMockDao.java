@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import fr.eservices.drive.dao.DataException;
 import fr.eservices.drive.model.Article;
 import fr.eservices.drive.model.Cart;
-
+/*
 @Component
 @Qualifier("mock")
 public class CartMockDao implements CartDao {
@@ -61,3 +61,4 @@ public class CartMockDao implements CartDao {
 	}
 
 }
+ */
