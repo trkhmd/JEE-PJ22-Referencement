@@ -8,7 +8,7 @@ public class Stock {
     @GeneratedValue
     private String id;
 
-    @OneToOne
+    @ManyToOne
     private Article article;
     private int stock;
 
