@@ -1,10 +1,11 @@
 package fr.eservices.drive.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@Inheritance
 public class Article {
 	@Id
 	@GeneratedValue
@@ -14,6 +15,9 @@ public class Article {
 	private double tva;
 	private String name;
 	private String img;
+
+	@ManyToMany
+	private List<Category> categories = new ArrayList<>();
 
 	public String getId() {
 		return id;
@@ -61,5 +65,13 @@ public class Article {
 
 	public void setImg(String img) {
 		this.img = img;
+	}
+
+	public List<Category> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(List<Category> categories) {
+		this.categories = categories;
 	}
 }

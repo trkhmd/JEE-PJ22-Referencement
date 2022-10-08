@@ -1,15 +1,15 @@
 package fr.eservices.drive.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Stock {
     @Id
     @GeneratedValue
     private String id;
-    private String articleId;
+
+    @OneToOne
+    private Article article;
     private int stock;
 
     public String getId() {
@@ -20,12 +20,12 @@ public class Stock {
         this.id = id;
     }
 
-    public String getArticleId() {
-        return articleId;
+    public Article getArticle() {
+        return article;
     }
 
-    public void setArticleId(String articleId) {
-        this.articleId = articleId;
+    public void setArticle(Article article) {
+        this.article = article;
     }
 
     public int getStock() {
