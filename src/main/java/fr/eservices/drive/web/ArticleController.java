@@ -41,7 +41,11 @@ public class ArticleController {
     }
 
     @GetMapping()
-    public String getAllArticles(Model model){
+    public String getAllArticles(Model model, 
+        @RequestParam(name = "cat", required = false) String catFilter,
+        @RequestParam(name = "name", required = false) String nameFilter,
+        @RequestParam(name = "ref", required = false) String refFilter
+        ){
 
         // generate a list of 5 categories
         for(int i=0; i<5; i++){
@@ -67,10 +71,17 @@ public class ArticleController {
                 article.getCategories().add(categoryRepository.findById("4"));
             articleRepository.save(article);
         }
-        List<Article> articles = articleRepository.findAll();
+
+        if( catFilter != null ){
+            Category cat = categoryRepository.findById(catFilter);
+            model.addAttribute("articles", articleRepository.findByCategories(cat));
+        }
+
+
+        // List<Article> articles = articleRepository.findAll();
         List<Category> categories = categoryRepository.findAll();
         // System.out.println("articles = " + articles);
-        model.addAttribute("articles", articles);
+        // model.addAttribute("articles", articles);
         model.addAttribute("categories", categories);
         return "all_articles";
     }
