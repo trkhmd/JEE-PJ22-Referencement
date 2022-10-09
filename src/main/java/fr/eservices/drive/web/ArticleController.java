@@ -3,7 +3,6 @@ package fr.eservices.drive.web;
 import fr.eservices.drive.dao.DataException;
 import fr.eservices.drive.model.Article;
 import fr.eservices.drive.repository.ArticleRepository;
-import fr.eservices.drive.repository.StockRepository;
 import fr.eservices.drive.web.dto.ArticleEntry;
 import fr.eservices.drive.web.dto.SimpleResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 @Controller
-@RequestMapping(path="/article")
+@RequestMapping(path="/articles")
 public class ArticleController {
 
     @Autowired
@@ -38,7 +37,18 @@ public class ArticleController {
 
     @GetMapping()
     public String getAllArticles(Model model){
+
+        // generare a list of 50 article
+        for(int i = 0; i < 50; i++){
+            Article article = new Article();
+            article.setName("Article " + i);
+            article.setEan13("EAN13 " + i);
+            article.setPrice(1.0 * i);
+            article.setVat(0.2);
+            articleRepository.save(article);
+        }
         List<Article> articles = articleRepository.findAll();
+        // System.out.println("articles = " + articles);
         model.addAttribute("articles", articles);
         return "all_articles";
     }

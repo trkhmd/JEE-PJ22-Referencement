@@ -7,14 +7,26 @@ import java.util.List;
 @Entity
 public class Article {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private String id;
 	private String ean13;
 	private double price;
 	private double vat;
 	private String name;
 	private String img;
-
 	@ManyToMany
 	private List<Category> categories = new ArrayList<>();
+
+	public Article() {
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public String getEan13() {
 		return ean13;

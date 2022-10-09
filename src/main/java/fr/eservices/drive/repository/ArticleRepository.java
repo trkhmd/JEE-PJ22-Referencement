@@ -7,7 +7,9 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface ArticleRepository extends CrudRepository<Article,String> {
-    Article findByEan13(String id);
-    Pageable findAll(Pageable pageable);
+
     List<Article> findAll();
+    Pageable findAll(Pageable pageable);
+    Article findById(String id);
+    Article findByEan13(String ean13);
 }
