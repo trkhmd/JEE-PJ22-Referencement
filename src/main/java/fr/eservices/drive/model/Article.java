@@ -14,7 +14,7 @@ public class Article {
 	private double vat;
 	private String name;
 	private String img;
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Category> categories = new ArrayList<>();
 
 	public Article() {

@@ -2,7 +2,9 @@ package fr.eservices.drive.web;
 
 import fr.eservices.drive.dao.DataException;
 import fr.eservices.drive.model.Article;
+import fr.eservices.drive.model.Category;
 import fr.eservices.drive.repository.ArticleRepository;
+import fr.eservices.drive.repository.CategoryRepository;
 import fr.eservices.drive.web.dto.ArticleEntry;
 import fr.eservices.drive.web.dto.SimpleResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ public class ArticleController {
     @Autowired
     ArticleRepository articleRepository;
 
+    @Autowired
+    CategoryRepository categoryRepository;
+
     @ExceptionHandler(DataException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
@@ -38,6 +43,13 @@ public class ArticleController {
     @GetMapping()
     public String getAllArticles(Model model){
 
+        // generate a list of 5 categories
+        for(int i=0; i<5; i++){
+            Category c = new Category();
+            c.setName("Category" + i);
+            categoryRepository.save(c);
+        }
+
         // generare a list of 50 article
         for(int i = 0; i < 50; i++){
             Article article = new Article();
@@ -45,11 +57,21 @@ public class ArticleController {
             article.setEan13("EAN13 " + i);
             article.setPrice(1.0 * i);
             article.setVat(0.2);
+            if( i% 3 == 0)
+                article.getCategories().add(categoryRepository.findById("1"));
+            if( i% 3 == 1)
+                article.getCategories().add(categoryRepository.findById("2"));
+            if( i% 3 == 2)
+                article.getCategories().add(categoryRepository.findById("3"));
+            else
+                article.getCategories().add(categoryRepository.findById("4"));
             articleRepository.save(article);
         }
         List<Article> articles = articleRepository.findAll();
+        List<Category> categories = categoryRepository.findAll();
         // System.out.println("articles = " + articles);
         model.addAttribute("articles", articles);
+        model.addAttribute("categories", categories);
         return "all_articles";
     }
 
