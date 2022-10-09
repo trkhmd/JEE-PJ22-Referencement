@@ -1,8 +1,10 @@
 package fr.eservices.drive.web;
 
 import fr.eservices.drive.dao.DataException;
+import fr.eservices.drive.model.Article;
 import fr.eservices.drive.model.Perishable;
 import fr.eservices.drive.repository.ArticleRepository;
+import fr.eservices.drive.repository.PerishedRepository;
 import fr.eservices.drive.web.dto.PerishableEntry;
 import fr.eservices.drive.web.dto.SimpleResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,10 @@ import java.util.List;
 public class PerishableController {
 
     @Autowired
-    ArticleRepository<Perishable> perishableRepository;
+    PerishedRepository perishableRepository;
+
+    @Autowired
+    ArticleRepository articleRepository;
 
     @ExceptionHandler(DataException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -58,9 +63,19 @@ public class PerishableController {
         return "all_perished";
     }
 
-    @GetMapping(path="/{ean13}.html", produces="text/html")
-    public String getProduct(@PathVariable(name="ean13") String ean13, Model model) throws DataException {
-        Perishable perishable = perishableRepository.findByEan13(ean13);
+    @GetMapping(path="/ean13/{ean13}.html", produces="text/html")
+    public String getPerishableByArticle(@PathVariable(name="ean13") String ean13, Model model) throws DataException {
+        String trimmedEan13 = ean13.trim();
+        Article article = articleRepository.findByEan13(trimmedEan13);
+        List<Perishable> perishables = perishableRepository.findByArticle(article);
+        model.addAttribute("perishables", perishables);
+        return "_perishables_info";
+    }
+
+    @GetMapping(path="/{id}.html", produces="text/html")
+    public String getPerishableByStockId(@PathVariable(name="id") String id, Model model) throws DataException {
+        String trimmedId = id.trim();
+        Perishable perishable = perishableRepository.findById(trimmedId);
         model.addAttribute("perishable", perishable);
         return "_perishable_info";
     }
@@ -69,80 +84,53 @@ public class PerishableController {
     @PostMapping(path="/add.json",consumes="application/json")
     public SimpleResponse add(@RequestBody PerishableEntry perishableEntry) {
         SimpleResponse res = new SimpleResponse();
-        if (perishableEntry.getName() == null ||
-                perishableEntry.getEan13() == null ||
-                perishableEntry.getImg() == null ||
-                perishableEntry.getPrice() <=0 ||
-                perishableEntry.getVat()<= 0 ||
+        if (perishableEntry.getEan13() == null ||
                 perishableEntry.getBestBefore() == null ||
                 perishableEntry.getLot() == null){
             res.status =  SimpleResponse.Status.ERROR;
             res.message = "Bad request verify entry";
             return res;
         }
-        if(perishableRepository.findByEan13(perishableEntry.getEan13()) != null) {
+        String trimmedEan13 = perishableEntry.getEan13().trim();
+        String trimmedLot = perishableEntry.getLot().trim();
+
+        Article article = articleRepository.findByEan13(trimmedEan13);
+        if(article == null) {
             res.status =  SimpleResponse.Status.ERROR;
-            res.message = "Ean13 is already used";
+            res.message = "Article couldn't be find with this Ean13:"+ trimmedEan13;
             return res;
         }
 
-        if(perishableEntry.getName().length() <3){
-            res.status =  SimpleResponse.Status.ERROR;
-            res.message = "Name is too short";
-            return res;
-        }
-
-        if(perishableEntry.getLot().length() <3){
+        if(trimmedLot.length() <3){
             res.status =  SimpleResponse.Status.ERROR;
             res.message = "Lot is too short";
             return res;
         }
 
-        if(perishableEntry.getVat()>1){
+        if(perishableEntry.getQuantity() <= 0){
             res.status =  SimpleResponse.Status.ERROR;
-            res.message = "Bad Vat";
+            res.message = "Quantity cannont be lower than 1";
             return res;
         }
 
-        if (perishableEntry.getEan13().length() != 13){
-            res.status =  SimpleResponse.Status.ERROR;
-            res.message = "Bad ean13";
-            return res;
+        List<Perishable> perishables = perishableRepository.findByArticle(article);
+        for(Perishable perishable: perishables) {
+            if(perishable.getLot().equals(trimmedLot)) {
+                res.status =  SimpleResponse.Status.ERROR;
+                res.message = "This lot is already registered, cannot be added more than once. Try to modify the existing quantity";
+                return res;
+            }
         }
-
-        //TODO: check category
 
         Perishable perishable = new Perishable();
-        perishable.setPrice(perishableEntry.getPrice());
-        perishable.setName(perishableEntry.getName());
-        //TODO: add categories
-        //article.setCategories(artEntry.getCategories());
-        perishable.setImg(perishableEntry.getImg());
-        perishable.setEan13(perishableEntry.getEan13());
-        perishable.setVat(perishableEntry.getVat());
-        perishable.setLot(perishableEntry.getLot());
-
+        perishable.setArticle(article);
+        perishable.setLot(trimmedLot);
         perishable.setBestBefore(perishableEntry.getBestBefore());
+        perishable.setQuantity(perishableEntry.getQuantity());
+
         perishableRepository.save(perishable);
         res.status = SimpleResponse.Status.OK;
-        res.message = "Article Added";
-        return res;
-    }
-
-    @DeleteMapping(path = "/{ean13}")
-    public SimpleResponse delete(@PathVariable String ean13) {
-        SimpleResponse res = new SimpleResponse();
-        Perishable perishable = perishableRepository.findByEan13(ean13);
-        if(perishable == null) {
-            res.status = SimpleResponse.Status.ERROR;
-            res.message = "Product id not found";
-            return res;
-        }
-        // TODO: fix problem with delete
-        // perishableRepository.delete(ean13);
-        res.status = SimpleResponse.Status.OK;
-        res.message = "";
-
+        res.message = "Perishable added";
         return res;
     }
 }

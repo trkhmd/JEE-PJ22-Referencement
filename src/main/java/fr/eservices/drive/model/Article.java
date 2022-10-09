@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Inheritance
 public class Article {
 	@Id
 	private String ean13;

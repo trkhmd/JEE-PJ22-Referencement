@@ -5,11 +5,7 @@ import java.util.List;
 
 public class ProductEntry {
     private String ean13;
-    private double price;
-    private double vat;
-    private String name;
-    private String img;
-    private List<String> categories = new ArrayList<>();
+    private int quantity;
 
     public String getEan13() {
         return ean13;
@@ -19,43 +15,11 @@ public class ProductEntry {
         this.ean13 = ean13;
     }
 
-    public double getPrice() {
-        return price;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public double getVat() {
-        return vat;
-    }
-
-    public void setVat(double vat) {
-        this.vat = vat;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getImg() {
-        return img;
-    }
-
-    public void setImg(String img) {
-        this.img = img;
-    }
-
-    public List<String> getCategories() {
-        return categories;
-    }
-
-    public void setCategories(List<String> categories) {
-        this.categories = categories;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

@@ -1,20 +1,19 @@
 package fr.eservices.drive.web.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class PerishableEntry {
     private String ean13;
-    private double price;
-    private double vat;
-    private String name;
-    private String img;
-    private List<String> categories = new ArrayList<>();
-
+    @JsonFormat(pattern="dd-MM-yyyy")
     private Date bestBefore;
 
     private String lot;
+
+    private int quantity;
 
     public String getEan13() {
         return ean13;
@@ -24,45 +23,6 @@ public class PerishableEntry {
         this.ean13 = ean13;
     }
 
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public double getVat() {
-        return vat;
-    }
-
-    public void setVat(double vat) {
-        this.vat = vat;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getImg() {
-        return img;
-    }
-
-    public void setImg(String img) {
-        this.img = img;
-    }
-
-    public List<String> getCategories() {
-        return categories;
-    }
-
-    public void setCategories(List<String> categories) {
-        this.categories = categories;
-    }
 
     public Date getBestBefore() {
         return bestBefore;
@@ -78,5 +38,13 @@ public class PerishableEntry {
 
     public void setLot(String lot) {
         this.lot = lot;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

@@ -21,7 +21,7 @@ import java.util.List;
 public class ArticleController {
 
     @Autowired
-    ArticleRepository<Article> articleRepository;
+    ArticleRepository articleRepository;
 
     @ExceptionHandler(DataException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -45,7 +45,8 @@ public class ArticleController {
 
     @GetMapping(path="/{ean13}.html", produces="text/html")
     public String getArticle(@PathVariable(name="ean13") String ean13, Model model) throws DataException {
-        Article article = articleRepository.findByEan13(ean13);
+        String trimmedEan13 = ean13.trim();
+        Article article = articleRepository.findByEan13(trimmedEan13);
         model.addAttribute("article", article);
         return "_article_info";
     }
@@ -64,14 +65,16 @@ public class ArticleController {
             res.message = "Bad request verify entry";
             return res;
         }
-
-        if(articleRepository.findByEan13(artEntry.getEan13()) != null) {
+        String trimmedEan13 = artEntry.getEan13().trim();
+        String trimmedName = artEntry.getName().trim();
+        String trimmedImg = artEntry.getImg().trim();
+        if(articleRepository.findByEan13(trimmedEan13) != null) {
             res.status =  SimpleResponse.Status.ERROR;
             res.message = "Ean13 is already used";
             return res;
         }
 
-        if(artEntry.getName().length() <3){
+        if(trimmedName.length() <3){
             res.status =  SimpleResponse.Status.ERROR;
             res.message = "Name too short";
             return res;
@@ -83,9 +86,9 @@ public class ArticleController {
             return res;
         }
 
-        if (artEntry.getEan13().length() != 13){
+        if (trimmedEan13.length() != 13){
             res.status =  SimpleResponse.Status.ERROR;
-            res.message = "Bad ean13:" + artEntry.getEan13();
+            res.message = "Bad ean13:" + trimmedEan13;
             return res;
         }
 
@@ -93,29 +96,29 @@ public class ArticleController {
 
         Article article = new Article();
         article.setPrice(artEntry.getPrice());
-        article.setName(artEntry.getName());
+        article.setName(trimmedName);
         //TODO: add categories
         //article.setCategories(artEntry.getCategories());
-        article.setImg(artEntry.getImg());
-        article.setEan13(artEntry.getEan13());
+        article.setImg(trimmedImg);
+        article.setEan13(trimmedEan13);
         article.setVat(artEntry.getVat());
         articleRepository.save(article);
-        Article added = articleRepository.findByEan13(artEntry.getEan13());
         res.status = SimpleResponse.Status.OK;
-        res.message = "Article Added ean13: " + artEntry.getEan13();
+        res.message = "Article Added ean13: " + trimmedEan13;
         return res;
     }
 
     @DeleteMapping(path = "/{ean13}")
     public SimpleResponse delete(@PathVariable String ean13) {
+        String trimmedEan13 = ean13.trim();
         SimpleResponse res = new SimpleResponse();
-        Article article = articleRepository.findByEan13(ean13);
+        Article article = articleRepository.findByEan13(trimmedEan13);
         if(article == null) {
             res.status = SimpleResponse.Status.ERROR;
             res.message = "article id not found";
             return res;
         }
-        articleRepository.delete(ean13);
+        articleRepository.delete(article);
         res.status = SimpleResponse.Status.OK;
         res.message = "";
         return res;

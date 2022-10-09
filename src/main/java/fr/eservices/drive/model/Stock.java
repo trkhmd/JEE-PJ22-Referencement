@@ -1,16 +1,20 @@
 package fr.eservices.drive.model;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 
 @Entity
+@Inheritance
 public class Stock {
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
 
     @ManyToOne
     private Article article;
-    private int stock;
+    private int quantity;
 
     public String getId() {
         return id;
@@ -28,11 +32,11 @@ public class Stock {
         this.article = article;
     }
 
-    public int getStock() {
-        return stock;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setStock(int stock) {
-        this.stock = stock;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }
