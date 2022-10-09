@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -40,6 +43,19 @@ public class PerishableController {
         List<Perishable> perishables = perishableRepository.findAll();
         model.addAttribute("perishables", perishables);
         return "all_perishables";
+    }
+
+    @GetMapping(path = "/perished")
+    public String getAllProductsPerished(Model model){
+        List<Perishable> perishables = perishableRepository.findAll();
+        List<Perishable> perishedList = new ArrayList<>();
+        for(Perishable perishable : perishables) {
+            if(perishable.getBestBefore().before(Date.from(Instant.now()))) {
+                perishedList.add(perishable);
+            }
+        }
+        model.addAttribute("perishedList", perishedList);
+        return "all_perished";
     }
 
     @GetMapping(path="/{ean13}.html", produces="text/html")
@@ -88,7 +104,7 @@ public class PerishableController {
             return res;
         }
 
-        if (perishableEntry.getEan13().length() == 13){
+        if (perishableEntry.getEan13().length() != 13){
             res.status =  SimpleResponse.Status.ERROR;
             res.message = "Bad ean13";
             return res;

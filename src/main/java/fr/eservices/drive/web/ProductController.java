@@ -81,7 +81,7 @@ public class ProductController {
             return res;
         }
 
-        if (productEntry.getEan13().length() == 13){
+        if (productEntry.getEan13().length() != 13){
             res.status =  SimpleResponse.Status.ERROR;
             res.message = "Bad ean13";
             return res;

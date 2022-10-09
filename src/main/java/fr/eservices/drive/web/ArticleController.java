@@ -55,7 +55,11 @@ public class ArticleController {
     @PostMapping(path="/add.json",consumes="application/json")
     public SimpleResponse add(@RequestBody ArticleEntry artEntry) {
         SimpleResponse res = new SimpleResponse();
-        if (artEntry.getName() == null || artEntry.getEan13() == null || artEntry.getImg() == null || artEntry.getPrice() <=0 || artEntry.getImg()==null || artEntry.getVat()<= 0){
+        if (artEntry.getName() == null ||
+                artEntry.getEan13() == null ||
+                artEntry.getImg() == null ||
+                artEntry.getPrice() <=0 ||
+                artEntry.getVat()<= 0){
             res.status =  SimpleResponse.Status.ERROR;
             res.message = "Bad request verify entry";
             return res;
@@ -79,9 +83,9 @@ public class ArticleController {
             return res;
         }
 
-        if (artEntry.getEan13().length() == 13){
+        if (artEntry.getEan13().length() != 13){
             res.status =  SimpleResponse.Status.ERROR;
-            res.message = "Bad ean13";
+            res.message = "Bad ean13:" + artEntry.getEan13();
             return res;
         }
 
