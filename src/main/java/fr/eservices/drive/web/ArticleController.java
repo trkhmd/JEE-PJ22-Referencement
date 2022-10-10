@@ -8,6 +8,8 @@ import fr.eservices.drive.repository.CategoryRepository;
 import fr.eservices.drive.web.dto.ArticleEntry;
 import fr.eservices.drive.web.dto.SimpleResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,48 +45,45 @@ public class ArticleController {
     public String getAllArticles(Model model, 
         @RequestParam(name = "cat", required = false) String catFilter,
         @RequestParam(name = "name", required = false) String nameFilter,
-        @RequestParam(name = "ref", required = false) String refFilter
+        @RequestParam(name = "ref", required = false) String refFilter,
+        @RequestParam(name = "page", defaultValue = "0") int page
         ){
-
-        // generate a list of 5 categories
-        for(int i=0; i<5; i++){
-            Category c = new Category();
-            c.setName("Category" + i);
-            categoryRepository.save(c);
-        }
-
-        // generare a list of 50 article
-        for(int i = 0; i < 50; i++){
-            Article article = new Article();
-            article.setName("Article" + new Random().nextInt(1000));
-            article.setEan13("EAN13" + (10000+new Random().nextInt(99999)));
-            article.setPrice(new Random().nextInt(1000));
-            article.setVat(new Random().nextInt(100) );
-            if( i% 3 == 0)
-                article.getCategories().add(categoryRepository.findById("1"));
-            if( i% 3 == 1)
-                article.getCategories().add(categoryRepository.findById("2"));
-            if( i% 3 == 2)
-                article.getCategories().add(categoryRepository.findById("3"));
-            else
-                article.getCategories().add(categoryRepository.findById("4"));
-            articleRepository.save(article);
-        }
-        List<Article> articles;
-        List<Category> categories = categoryRepository.findAll();
-
-        // if( catFilter != null ){
-        //     Category cat = categoryRepository.findById(catFilter);
-        //     model.addAttribute("articles", articleRepository.findByCategories(cat));
-        // }
+        Page<Article> articles;
+        PageRequest pageable = new PageRequest(page, 10);
         
-        System.out.println("catFilter = " + catFilter+ " nameFilter = " + nameFilter + " refFilter = " + refFilter);
+        // generate a list of 5 categories
+        List<Category> categories = categoryRepository.findAll();
+        if(categories.size() <5 )
+        {
+            for(int i=0; i<5; i++){
+                Category c = new Category();
+                c.setName("Category" + i);
+                categoryRepository.save(c);
+            }
 
+            // generare a list of 50 article
+            for (int i = 0; i < 50; i++) {
+                Article article = new Article();
+                article.setName("Article" + new Random().nextInt(1000));
+                article.setEan13("EAN13" + (10000 + new Random().nextInt(99999)));
+                article.setPrice(new Random().nextInt(1000));
+                article.setVat(new Random().nextInt(100));
+                if (i % 3 == 0)
+                    article.getCategories().add(categoryRepository.findById("1"));
+                    if (i % 3 == 1)
+                    article.getCategories().add(categoryRepository.findById("2"));
+                    if (i % 3 == 2)
+                    article.getCategories().add(categoryRepository.findById("3"));
+                else
+                article.getCategories().add(categoryRepository.findById("4"));
+                articleRepository.save(article);
+            }
+        }
+        
+        categories = categoryRepository.findAll();
         if( (catFilter == null || catFilter.isEmpty()) && (nameFilter == null || nameFilter.isEmpty() ) && (refFilter == null || refFilter.isEmpty() ) ){
-            System.out.println("no filter");
-            articles = articleRepository.findAll();
+            articles = articleRepository.findAll(pageable);
         } else {
-            System.out.println("filter");
             Category cat;
             if(catFilter != null && !catFilter.isEmpty())
             {
@@ -94,22 +93,22 @@ public class ArticleController {
                     nameFilter = "%" + nameFilter + "%";
                     if(refFilter != null && !refFilter.trim().isEmpty())
                     {
-                        articles = articleRepository.findByCategoriesAndNameLikeAndEan13Like(cat, nameFilter, refFilter);
+                        articles = articleRepository.findByCategoriesAndNameLikeAndEan13Like(cat, nameFilter, refFilter, pageable);
                     }
                     else
                     {
-                        articles = articleRepository.findByCategoriesAndNameLike(cat, nameFilter);
+                        articles = articleRepository.findByCategoriesAndNameLike(cat, nameFilter, pageable);
                     }
                 }
                 else
                 {
                     if(refFilter != null && !refFilter.trim().isEmpty())
                     {
-                        articles = articleRepository.findByCategoriesAndEan13Like(cat, refFilter);
+                        articles = articleRepository.findByCategoriesAndEan13Like(cat, refFilter, pageable);
                     }
                     else
                     {
-                        articles = articleRepository.findByCategories(cat);
+                        articles = articleRepository.findByCategories(cat, pageable);
                     }
                 }
             }
@@ -120,16 +119,16 @@ public class ArticleController {
                     nameFilter = "%" + nameFilter + "%";
                     if(refFilter != null && !refFilter.trim().isEmpty())
                     {
-                        articles = articleRepository.findByNameLikeAndEan13Like(nameFilter, refFilter);
+                        articles = articleRepository.findByNameLikeAndEan13Like(nameFilter, refFilter, pageable);
                     }
                     else
                     {
-                        articles = articleRepository.findByNameLike(nameFilter);
+                        articles = articleRepository.findByNameLike(nameFilter, pageable);
                     }
                 }
                 else
                 {
-                    articles = articleRepository.findByEan13Like(refFilter);
+                    articles = articleRepository.findByEan13Like(refFilter, pageable);
                 }
             }
         }
