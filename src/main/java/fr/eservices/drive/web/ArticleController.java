@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Random;
 
 @Controller
 @RequestMapping(path="/articles")
@@ -35,9 +36,7 @@ public class ArticleController {
         PrintWriter w = new PrintWriter( out );
         ex.printStackTrace(w);
         w.close();
-        return
-                "ERROR"
-                        + "<!--\n" + out.toString() + "\n-->";
+        return "ERROR"+"<!--\n" + out.toString() + "\n-->";
     }
 
     @GetMapping()
@@ -57,10 +56,10 @@ public class ArticleController {
         // generare a list of 50 article
         for(int i = 0; i < 50; i++){
             Article article = new Article();
-            article.setName("Article " + i);
-            article.setEan13("EAN13 " + i);
-            article.setPrice(1.0 * i);
-            article.setVat(0.2);
+            article.setName("Article" + new Random().nextInt(1000));
+            article.setEan13("EAN13" + (10000+new Random().nextInt(99999)));
+            article.setPrice(new Random().nextInt(1000));
+            article.setVat(new Random().nextInt(100) );
             if( i% 3 == 0)
                 article.getCategories().add(categoryRepository.findById("1"));
             if( i% 3 == 1)
@@ -71,17 +70,70 @@ public class ArticleController {
                 article.getCategories().add(categoryRepository.findById("4"));
             articleRepository.save(article);
         }
-
-        if( catFilter != null ){
-            Category cat = categoryRepository.findById(catFilter);
-            model.addAttribute("articles", articleRepository.findByCategories(cat));
-        }
-
-
-        // List<Article> articles = articleRepository.findAll();
+        List<Article> articles;
         List<Category> categories = categoryRepository.findAll();
-        // System.out.println("articles = " + articles);
-        // model.addAttribute("articles", articles);
+
+        // if( catFilter != null ){
+        //     Category cat = categoryRepository.findById(catFilter);
+        //     model.addAttribute("articles", articleRepository.findByCategories(cat));
+        // }
+        
+        System.out.println("catFilter = " + catFilter+ " nameFilter = " + nameFilter + " refFilter = " + refFilter);
+
+        if( (catFilter == null || catFilter.isEmpty()) && (nameFilter == null || nameFilter.isEmpty() ) && (refFilter == null || refFilter.isEmpty() ) ){
+            System.out.println("no filter");
+            articles = articleRepository.findAll();
+        } else {
+            System.out.println("filter");
+            Category cat;
+            if(catFilter != null && !catFilter.isEmpty())
+            {
+                cat = categoryRepository.findById(catFilter);
+                if(nameFilter != null && !nameFilter.trim().isEmpty())
+                {
+                    nameFilter = "%" + nameFilter + "%";
+                    if(refFilter != null && !refFilter.trim().isEmpty())
+                    {
+                        articles = articleRepository.findByCategoriesAndNameLikeAndEan13Like(cat, nameFilter, refFilter);
+                    }
+                    else
+                    {
+                        articles = articleRepository.findByCategoriesAndNameLike(cat, nameFilter);
+                    }
+                }
+                else
+                {
+                    if(refFilter != null && !refFilter.trim().isEmpty())
+                    {
+                        articles = articleRepository.findByCategoriesAndEan13Like(cat, refFilter);
+                    }
+                    else
+                    {
+                        articles = articleRepository.findByCategories(cat);
+                    }
+                }
+            }
+            else
+            {
+                if(nameFilter != null && !nameFilter.trim().isEmpty())
+                {
+                    nameFilter = "%" + nameFilter + "%";
+                    if(refFilter != null && !refFilter.trim().isEmpty())
+                    {
+                        articles = articleRepository.findByNameLikeAndEan13Like(nameFilter, refFilter);
+                    }
+                    else
+                    {
+                        articles = articleRepository.findByNameLike(nameFilter);
+                    }
+                }
+                else
+                {
+                    articles = articleRepository.findByEan13Like(refFilter);
+                }
+            }
+        }
+        model.addAttribute("articles", articles);
         model.addAttribute("categories", categories);
         return "all_articles";
     }

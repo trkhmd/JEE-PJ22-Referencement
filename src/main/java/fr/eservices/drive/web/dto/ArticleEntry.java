@@ -7,8 +7,8 @@ import java.util.List;
 
 public class ArticleEntry {
     private String ean13;
-    private double price;
-    private double vat;
+    private int price;
+    private int vat;
     private String name;
     private String img;
     private List<String> categories = new ArrayList<>();
@@ -21,19 +21,19 @@ public class ArticleEntry {
         this.ean13 = ean13;
     }
 
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
-    public double getVat() {
+    public int getVat() {
         return vat;
     }
 
-    public void setVat(double vat) {
+    public void setVat(int vat) {
         this.vat = vat;
     }
 

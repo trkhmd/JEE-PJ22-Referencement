@@ -10,8 +10,8 @@ public class Article {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String id;
 	private String ean13;
-	private double price;
-	private double vat;
+	private int price;
+	private int vat;
 	private String name;
 	private String img;
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -36,19 +36,19 @@ public class Article {
 		this.ean13 = ean13;
 	}
 
-	public double getPrice() {
+	public int getPrice() {
 		return price;
 	}
 
-	public void setPrice(double price) {
+	public void setPrice(int price) {
 		this.price = price;
 	}
 
-	public double getVat() {
+	public int getVat() {
 		return vat;
 	}
 
-	public void setVat(double tva) {
+	public void setVat(int tva) {
 		this.vat = tva;
 	}
 

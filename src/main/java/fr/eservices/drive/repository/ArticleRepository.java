@@ -14,5 +14,12 @@ public interface ArticleRepository extends CrudRepository<Article,String> {
     Pageable findAll(Pageable pageable);
     Article findById(String id);
     Article findByEan13(String ean13);
-    List<Article> findByCategories(Category category);
+    List<Article> findByCategories(Category cat);
+    List<Article> findByNameLike(String nameFilter);
+    List<Article> findByEan13Like(String refFilter);
+    List<Article> findByCategoriesAndNameLikeAndEan13Like(Category cat, String nameFilter, String refFilter);
+    List<Article> findByCategoriesAndNameLike(Category cat, String nameFilter);
+    List<Article> findByCategoriesAndEan13Like(Category cat, String refFilter);
+    List<Article> findByNameLikeAndEan13Like(String nameFilter, String refFilter);
+
 }
