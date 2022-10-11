@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.Random;
 
 @Controller
 @RequestMapping(path="/articles")
@@ -52,34 +51,7 @@ public class ArticleController {
         Page<Article> articles;
         PageRequest pageable = new PageRequest(page, size);
         
-        // generate a list of 5 categories
         List<Category> categories = categoryRepository.findAll();
-        if(categories.size() <5 )
-        {
-            for(int i=0; i<5; i++){
-                Category c = new Category();
-                c.setName("Category" + i);
-                categoryRepository.save(c);
-            }
-
-            // generare a list of 50 article
-            for (int i = 0; i < 53; i++) {
-                Article article = new Article();
-                article.setName("Article" + new Random().nextInt(1000));
-                article.setEan13("EAN13" + (10000 + new Random().nextInt(99999)));
-                article.setPrice(new Random().nextInt(1000));
-                article.setVat(new Random().nextInt(100));
-                if (i % 3 == 0)
-                    article.getCategories().add(categoryRepository.findById("1"));
-                    if (i % 3 == 1)
-                    article.getCategories().add(categoryRepository.findById("2"));
-                    if (i % 3 == 2)
-                    article.getCategories().add(categoryRepository.findById("3"));
-                else
-                article.getCategories().add(categoryRepository.findById("4"));
-                articleRepository.save(article);
-            }
-        }
         
         categories = categoryRepository.findAll();
         if( (catFilter == null || catFilter.isEmpty()) && (nameFilter == null || nameFilter.isEmpty() ) && (refFilter == null || refFilter.isEmpty() ) ){

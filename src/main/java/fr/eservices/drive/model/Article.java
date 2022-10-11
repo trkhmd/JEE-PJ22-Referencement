@@ -6,6 +6,7 @@ import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "article_type")
 public class Article {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,9 +18,8 @@ public class Article {
 	private String img;
 	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Category> categories = new ArrayList<>();
-
 	@OneToMany
-	private List<Stock> stocks;
+	private List<Stock> stocks = new ArrayList<>();
 
 	public Article() {
 	}
