@@ -11,7 +11,6 @@ import java.util.HashMap;
 @Component
 @Qualifier("mock")
 public class UserMock implements UserDao {
-
     private HashMap<String, User> users = new HashMap<>();
 
     public UserMock() {
