@@ -33,3 +33,10 @@ INSERT INTO Article_Category(categories_id, Article_ean13) values ('2', '1278651
 
 INSERT INTO Article_Category(categories_id, Article_ean13) values ('4', '1278651251708'); -- casque velo accessoire
 INSERT INTO Article_Category(categories_id, Article_ean13) values ('4', '1278651251709'); -- reveil accessoire
+
+INSERT INTO Stock (article_ean13, quantity, bestBefore, lot, DTYPE, id) values ('1278651251706', 10, DATE '2022-12-17', '123', 'Perishable', '4028818a83c80d2c0183c80efe770000'); -- ajout temporaire
+INSERT INTO Stock (article_ean13, quantity, bestBefore, lot, DTYPE, id) values ('1278651251706', 12, DATE '2022-11-12', '124', 'Perishable', '4028818a83c80d2c0183c80efe770012'); -- ajout temporaire
+INSERT INTO Stock (article_ean13, quantity, bestBefore, lot, DTYPE, id) values ('1278651251707', 5, DATE '2022-10-10', '451', 'Perishable', '4028818a83c80d2c0183c80efe770023'); -- ajout temporaire
+INSERT INTO Stock (article_ean13, quantity, bestBefore, lot, DTYPE, id) values ('1278651251707', 25, DATE '2022-09-17', '452', 'Perishable', '4028818a83c80d2c0183c80efe770034'); -- ajout temporaire
+INSERT INTO Stock (article_ean13, quantity, bestBefore, lot, DTYPE, id) values ('1278651251706', 5, DATE '2022-10-10', '451', 'Perishable', '4028818a83c80d2c0183c80efe770025'); -- ajout temporaire
+INSERT INTO Stock (article_ean13, quantity, bestBefore, lot, DTYPE, id) values ('1278651251706', 25, DATE '2022-09-17', '452', 'Perishable', '4028818a83c80d2c0183c80efe770037'); -- ajout temporaire
