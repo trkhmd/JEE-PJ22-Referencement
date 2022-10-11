@@ -12,12 +12,12 @@
     <title>Produits périmés</title>
 </head>
 <body>
-<c:if test="${perishedList == null || perishedList.size() == 0}">
+<c:if test="${perishables == null || perishables.size() == 0}">
     <p>Aucun produit périmié</p>
 </c:if>
-<c:if test="${perishedList != null}">
-    <c:forEach items="${perishedList}" var="perished">
-        <p><c:out value="${perished.name}"/>
+<c:if test="${perishables != null && perishables.size() > 0}">
+    <c:forEach items="${perishables}" var="perishable">
+<p><c:out value="${perishable.article.name}"/>
     </c:forEach>
 </c:if>
 </body>
