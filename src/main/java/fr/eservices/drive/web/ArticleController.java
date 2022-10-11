@@ -46,10 +46,11 @@ public class ArticleController {
         @RequestParam(name = "cat", required = false) String catFilter,
         @RequestParam(name = "name", required = false) String nameFilter,
         @RequestParam(name = "ref", required = false) String refFilter,
-        @RequestParam(name = "page", defaultValue = "0") int page
+        @RequestParam(name = "page", defaultValue = "0") int page,
+        @RequestParam(name = "size", defaultValue = "10") int size
         ){
         Page<Article> articles;
-        PageRequest pageable = new PageRequest(page, 10);
+        PageRequest pageable = new PageRequest(page, size);
         
         // generate a list of 5 categories
         List<Category> categories = categoryRepository.findAll();
@@ -62,7 +63,7 @@ public class ArticleController {
             }
 
             // generare a list of 50 article
-            for (int i = 0; i < 50; i++) {
+            for (int i = 0; i < 53; i++) {
                 Article article = new Article();
                 article.setName("Article" + new Random().nextInt(1000));
                 article.setEan13("EAN13" + (10000 + new Random().nextInt(99999)));

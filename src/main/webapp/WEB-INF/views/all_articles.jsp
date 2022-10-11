@@ -8,6 +8,7 @@
 
     <div class="row" style="margin:0px; margin-bottom:10px;">
         <form class="form-inline">
+            <input type="hidden" value="${articels.size}" name="size" />
             <div class="form-group">
                 <label for="category">Category</label>
                 <select class="form-control" id="category" name="cat">
@@ -19,11 +20,11 @@
             </div>
             <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="Enter the name...">
+                <input type="text" class="form-control" id="name" name="name" value="${param.name}" placeholder="Enter the name...">
             </div>
             <div class="form-group">
                 <label for="ref">Referance</label>
-                <input type="text" class="form-control" id="ref" name="ref" placeholder="Enter the reference...">
+                <input type="text" class="form-control" id="ref" name="ref" value="${param.ref}" placeholder="Enter the reference...">
             </div>
             <button type="submit" class="btn btn-default">
                 <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
@@ -66,23 +67,31 @@
     </c:forEach>  
     </table>
 
-    <nav aria-label="Page navigation">
+    <nav aria-label="Page navigation" style="display: flex;justify-content: space-between;">
         <ul class="pagination">
             <li>
-            <a href="?page=1&cat=${param.cat}&name=${param.name}&ref=${param.ref}" aria-label="Begin">
+            <a href="?page=1&size=${articles.size}&cat=${param.cat}&name=${param.name}&ref=${param.ref}" aria-label="Begin">
                 <span aria-hidden="true">|&laquo;</span>
             </a>
             </li>
             <c:forEach var="i" 
                 begin="${articles.number-10 > 0 ? articles.number-10 : 1}" 
                 end="${articles.number+10 < articles.totalPages ? articles.number+10 : articles.totalPages}">
-            <li class="${ i == articles.number+1 ? 'active' : ''}"><a href="?page=${i-1}&cat=${param.cat}&name=${param.name}&ref=${param.ref}">${i}</a></li>
+                <li class="${ i == articles.number+1 ? 'active' : ''}"><a href="?page=${i-1}&size=${articles.size}&cat=${param.cat}&name=${param.name}&ref=${param.ref}">${i}</a></li>
             </c:forEach>
             <li>
-            <a href="?page=${list.totalPages}&cat=${param.cat}&name=${param.name}&ref=${param.ref}" aria-label="End">
+            <a href="?page=${articles.totalPages}&size=${articles.size}&cat=${param.cat}&name=${param.name}&ref=${param.ref}" aria-label="End">
                 <span aria-hidden="true">&raquo;|</span>
             </a>
             </li>
+        </ul>
+        <ul class="pagination">
+            <li class="${ 10 == articles.size ? 'active' : ''}">
+                <a href="?page=0&size=10&cat=${param.cat}&name=${param.name}&ref=${param.ref}">10</a></li>
+            <li class="${ 50 == articles.size ? 'active' : ''}">
+                <a href="?page=0&size=50&cat=${param.cat}&name=${param.name}&ref=${param.ref}">50</a></li>
+            <li class="${ 200 == articles.size ? 'active' : ''}">
+            <a href="?page=0&size=200&cat=${param.cat}&name=${param.name}&ref=${param.ref}">200</a></li>
         </ul>
     </nav>
 
