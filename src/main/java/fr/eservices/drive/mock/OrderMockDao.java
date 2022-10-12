@@ -84,4 +84,14 @@ public class OrderMockDao implements OrderDao {
     public Order findById(String id) {
         return orders.get(id);
     }
+
+    @Override
+    public void updateStatus(String id, ArticleOrder articleOrder, ArticleStatus articleStatus) {
+        Order order = orders.get(id);
+        for(ArticleOrder ao : order.getArticlesOrder()) {
+            if(ao.equals(articleOrder)) {
+                ao.setArticleStatus(articleStatus);
+            }
+        }
+    }
 }

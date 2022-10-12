@@ -6,30 +6,38 @@ $(function() {
     link.media = 'all';
     document.getElementsByTagName('head')[0].appendChild(link);
 
-    loadTable();
+    manageSearch();
 });
-function loadTable() {
-    $("#searchOrder").click( function(e) {
-        const ref = $("#orderNumber")[0].value;
-        console.log(ref);
-        $.ajax({
-            url: "order/"+ ref + ".html",
-        }).done(function (data) {
-            JSON.stringify( $('#container').html(data));
-        });
+function manageSearch() {
+    $("#searchOrder").on('click', () => loadTable());
+    $("#orderNumber").on('keyup', function (e) {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            loadTable($("#orderNumber")[0].value);
+        }
+    });
+
+}
+
+function loadTable(id) {
+    $.ajax({
+        url: "order/"+ id + ".html",
+    }).done(function (data) {
+        JSON.stringify( $('#container').html(data));
+        loadOnClick();
     });
 }
 
 function loadOnClick() {
-    $("#searchOrder").click( function(e) {
-        const ref = $("#orderNumber").data("ref");
+    $(".addStock").click( function(e) {
+        const ref = $(this).data("ref");
+        const orderId = $(this).data("order");
         $.ajax({
-            method: 'GET',
-            url: "order/"+ ref + ".html",
-            dataType: "html"
+            method: 'PUT',
+            url: "order/"+ orderId + "/" + ref + ".json",
+            dataType: "json"
         }).done(function (data) {
             if(data['status'] === 'OK') {
-                loadTable();
+                loadTable(orderId);
             }
         });
     });

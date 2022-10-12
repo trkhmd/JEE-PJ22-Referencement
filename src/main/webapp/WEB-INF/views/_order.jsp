@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -13,12 +14,15 @@
 </head>
 <body>
 <c:if test="${order == null}">
-    <p>Aucune commande avec ce numéro</p>
+    <h3>Aucune commande avec ce numéro</h3>
 </c:if>
 <c:if test="${order != null}">
 
-    <h2><c:out value="${order.deliveredOn}"/></h2>
-<%--    faire le fmt de date--%>
+    <h2>Commande : <c:out value="${order.id}"/></h2>
+    <h3>
+        <fmt:setLocale value="fr_FR"/>
+        <fmt:formatDate value="${order.deliveredOn}" pattern="d-M-YY"/>
+    </h3>
 
     <table class="table table-bordered table-striped table-hover">
         <tr>
@@ -42,7 +46,7 @@
                     </c:when>
                     <c:otherwise>
                         <td>Non</td>
-                        <td><span class="glyphicon glyphicon-plus-sign addStock" data-ref="${articleOrder.article.ean13}" data-qty="${articleOrder.quantity}"></span></td>
+                        <td><span class="glyphicon glyphicon-plus-sign addStock" data-ref="${articleOrder.article.ean13}" data-qty="${articleOrder.quantity}" data-order="${order.id}"></span></td>
                     </c:otherwise>
                 </c:choose>
             </tr>

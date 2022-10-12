@@ -4,6 +4,7 @@ public enum ArticleStatus {
 
     REFUSED,
     DELIVERED,
-    RETURNED;
+    RETURNED,
+    BACK_TO_STOCK;
 
 }
