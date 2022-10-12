@@ -52,7 +52,7 @@ public class ArticleController {
         PageRequest pageable = new PageRequest(page, size);
         
         List<Category> categories = categoryRepository.findAll();
-        
+
         categories = categoryRepository.findAll();
         if( (catFilter == null || catFilter.isEmpty()) && (nameFilter == null || nameFilter.isEmpty() ) && (refFilter == null || refFilter.isEmpty() ) ){
             articles = articleRepository.findAll(pageable);

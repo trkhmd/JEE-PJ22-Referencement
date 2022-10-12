@@ -14,7 +14,7 @@
                 <select class="form-control" id="category" name="cat">
                 <option value="">TOUS</option>
                 <c:forEach items="${categories}" var="category">
-                    <option value="${category.id}">${category.name}</option>
+                    <option value="${category.id}" >${category.name}</option>
                 </c:forEach>
                 </select>
             </div>
@@ -35,34 +35,22 @@
     <%-- Display all articles --%>
     <table class="table table-bordered table-striped table-hover">
     <tr>
-        <th>#</th>
-        <th>Name</th>
         <th>EAN</th>
+        <th>Name</th>
         <th>Price</th>
-        <th>VAT</th>
-        <th>Category</th>
     </tr>
+    <c:choose>
+    <c:when test="${empty articles.content}">
+        <tr>
+            <td colspan="6">No articles found</td>
+        </tr>
+    </c:when>
+    </c:choose>
     <c:forEach items="${articles.content}" var="art">
     <tr>
-        <td><a href="article/${art.getId()}.html">${art.getId()}</a></td>
-        <td>${art.getName()}</td>
         <td>${art.getEan13()}</td>
+        <td>${art.getName()}</td>
         <td><fmt:formatNumber value="${art.price / 100.0}" type="currency" currencySymbol="€"/></td>
-        <td>${art.vat} %</td>
-        <td>
-            <c:choose>
-                <c:when test="${empty art.categories}">
-                    <span class="text-muted">No category</span>
-                </c:when>
-                <c:otherwise>
-                    <ul>
-                        <c:forEach items="${art.categories}" var="cat">
-                            <li>${cat.getName()}</li>
-                        </c:forEach>
-                    </ul>
-                </c:otherwise>
-            </c:choose>
-        </td>
     </tr>
     </c:forEach>  
     </table>

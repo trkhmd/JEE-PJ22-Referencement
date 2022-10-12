@@ -5,32 +5,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "article_type")
 public class Article {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private String id;
 	private String ean13;
 	private int price;
 	private int vat;
 	private String name;
 	private String img;
-	@ManyToMany(fetch = FetchType.EAGER)
+
+	@ManyToMany()
 	private List<Category> categories = new ArrayList<>();
-	@OneToMany
-	private List<Stock> stocks = new ArrayList<>();
-
-	public Article() {
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	public String getEan13() {
 		return ean13;

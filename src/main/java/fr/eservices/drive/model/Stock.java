@@ -12,9 +12,9 @@ public class Stock {
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
 
-    private int quantity;
     @ManyToOne
     private Article article;
+    private int quantity;
 
     public String getId() {
         return id;
@@ -24,13 +24,13 @@ public class Stock {
         this.id = id;
     }
 
-    // public Article getArticle() {
-    //     return article;
-    // }
+    public Article getArticle() {
+        return article;
+    }
 
-    // public void setArticle(Article article) {
-    //     this.article = article;
-    // }
+    public void setArticle(Article article) {
+        this.article = article;
+    }
 
     public int getQuantity() {
         return quantity;
