@@ -147,9 +147,9 @@ public class ArticleController {
             return res;
         }
 
-        if(artEntry.getVat()>1){
+        if(artEntry.getVat()>100){
             res.status =  SimpleResponse.Status.ERROR;
-            res.message = "Bad Vat";
+            res.message = "Bad TVA";
             return res;
         }
 
@@ -175,6 +175,7 @@ public class ArticleController {
         return res;
     }
 
+    @ResponseBody
     @DeleteMapping(path = "/{ean13}")
     public SimpleResponse delete(@PathVariable String ean13) {
         String trimmedEan13 = ean13.trim();

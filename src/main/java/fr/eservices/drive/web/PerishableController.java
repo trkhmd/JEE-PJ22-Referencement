@@ -43,14 +43,14 @@ public class PerishableController {
                         + "<!--\n" + out.toString() + "\n-->";
     }
 
-    @GetMapping()
+    @GetMapping(path="/all.html", produces="text/html")
     public String getAllProducts(Model model){
         List<Perishable> perishables = perishableRepository.findAll();
         model.addAttribute("perishables", perishables);
         return "all_perishables";
     }
 
-    @GetMapping(path = "/perished")
+    @GetMapping(path = "/perished.html", produces="text/html")
     public String getAllProductsPerished(Model model){
         List<Perishable> perishables = perishableRepository.findAll();
         List<Perishable> perishedList = new ArrayList<>();
@@ -59,8 +59,8 @@ public class PerishableController {
                 perishedList.add(perishable);
             }
         }
-        model.addAttribute("perishedList", perishedList);
-        return "all_perished";
+        model.addAttribute("perishables", perishedList);
+        return "perished_perishables";
     }
 
     // @GetMapping(path="/ean13/{ean13}.html", produces="text/html")
@@ -72,7 +72,7 @@ public class PerishableController {
     //     return "_perishables_info";
     // }
 
-    @GetMapping(path="/{id}.html", produces="text/html")
+    @GetMapping(path="/stock/{id}.html", produces="text/html")
     public String getPerishableByStockId(@PathVariable(name="id") String id, Model model) throws DataException {
         String trimmedId = id.trim();
         Perishable perishable = perishableRepository.findById(trimmedId);
