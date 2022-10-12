@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.time.Instant;
@@ -89,8 +90,8 @@ public class PerishableController {
     }
 
     @ResponseBody
-    @PostMapping(path="add.json",consumes="application/json")
-    public SimpleResponse add(@RequestBody PerishableEntry perishableEntry) {
+    @PostMapping( path = "/add.json", consumes="application/json", produces="application/json")
+    public SimpleResponse add(@Valid @RequestBody PerishableEntry perishableEntry) {
         SimpleResponse res = new SimpleResponse();
         if (perishableEntry.getEan13() == null ||
                 perishableEntry.getBestBefore() == null ||
@@ -106,7 +107,7 @@ public class PerishableController {
         String trimmedLot = perishableEntry.getLot().trim();
         System.out.println(trimmedEan13);
 
-        Article article = articleRepository.findByEan13("1278651251702");
+        Article article = articleRepository.findByEan13(trimmedEan13);
         List<Article> test = articleRepository.findAll();
         System.out.println(test.toString());
 

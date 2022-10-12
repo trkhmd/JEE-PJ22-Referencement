@@ -25,13 +25,11 @@
 <body>
 <%--@elvariable id="PerishableEntry" type="fr.eservices.drive.web.dto.PerishableEntry"--%>
 <h1>Ajouter un article perisable</h1>
-    <form:form action="addPerishable" modelAttribute="PerishableEntry" method="POST" >
-
-
+    <form:form action="/projet/perishable/add.json" modelAttribute="PerishableEntry" method="POST" enctype='application/json' id="form">
 
 
    <div class="form-group">
-            <label for="ean13">Nom</label>
+            <label for="ean13">Ean13</label>
             <form:input path="ean13" id="ean13" class="form-control" />
         </div>
         <div class="form-group">
@@ -48,10 +46,35 @@
             <form:input type="number" id="quantity" path="quantity" class="form-control" />
         </div>
 
-            <input type="submit" value="Submit" name="submit" class="btn btn-primary" />
+        //button
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Ajouter</button>
+        </div>
+
 
 </form:form>
-
+<script>
+    var form = document.getElementById('form');
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var data = new FormData(form);
+        console.log(data);
+        $.ajax(
+            {
+                method: 'POST',
+                url: '/projet/perishable/add.json',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    ean13: data.get('ean13'),
+                    bestBefore: data.get('bestBefore'),
+                    lot: data.get('lot'),
+                    quantity: data.get('quantity')
+                }),
+            }
+        )
+    });
+</script>
 
 </body>
 
