@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
@@ -80,21 +81,35 @@ public class PerishableController {
         return "_perishable_info";
     }
 
+    @GetMapping(path = "/add.html", produces="text/html")
+    //Show the form to add a new perishable
+    public ModelAndView add(Model model) {
+
+        return new ModelAndView("_perishable_add", "PerishableEntry", new PerishableEntry());
+    }
+
     @ResponseBody
-    @PostMapping(path="/add.json",consumes="application/json")
+    @PostMapping(path="add.json",consumes="application/json")
     public SimpleResponse add(@RequestBody PerishableEntry perishableEntry) {
         SimpleResponse res = new SimpleResponse();
         if (perishableEntry.getEan13() == null ||
                 perishableEntry.getBestBefore() == null ||
-                perishableEntry.getLot() == null){
+                perishableEntry.getLot() == null ) {
             res.status =  SimpleResponse.Status.ERROR;
             res.message = "Bad request verify entry";
+
             return res;
         }
+        System.out.println(perishableEntry.getBestBefore());
+        System.out.println(perishableEntry.getQuantity());
         String trimmedEan13 = perishableEntry.getEan13().trim();
         String trimmedLot = perishableEntry.getLot().trim();
+        System.out.println(trimmedEan13);
 
-        Article article = articleRepository.findByEan13(trimmedEan13);
+        Article article = articleRepository.findByEan13("1278651251702");
+        List<Article> test = articleRepository.findAll();
+        System.out.println(test.toString());
+
         if(article == null) {
             res.status =  SimpleResponse.Status.ERROR;
             res.message = "Article couldn't be find with this Ean13:"+ trimmedEan13;
