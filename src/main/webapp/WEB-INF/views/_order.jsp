@@ -36,7 +36,7 @@
                 <td><c:out value="${articleOrder.quantity}"/></td>
                 <td><c:out value="${articleOrder.articleStatus}"/></td>
                 <c:choose>
-                    <c:when test="${articleOrder.article.isPerishable}">
+                    <c:when test="${articleOrder.article.perishable}">
                         <td>Oui</td>
                         <td></td>
                     </c:when>

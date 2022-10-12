@@ -73,5 +73,4 @@ public class Article {
     public void setPerishable(boolean perishable) {
         isPerishable = perishable;
     }
-
 }
