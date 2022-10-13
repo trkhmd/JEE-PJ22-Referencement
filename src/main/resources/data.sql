@@ -4,14 +4,14 @@ INSERT INTO Category (id, name) values ('3', 'Légume');
 INSERT INTO Category (id, name) values ('4', 'Accessoires');
 INSERT INTO Category (id, name) values ('5', 'Soupe');
 
-INSERT INTO Article (ean13, price, vat, name, img) values ('1278651251702', 212, 5, '1 Kg Pomme', 'pomme.png');
-INSERT INTO Article (ean13, price, vat, name, img) values ('1278651251703', 521, 5, 'Chou rouge bio', 'monImg');
-INSERT INTO Article (ean13, price, vat, name, img) values ('1278651251704', 221, 5, 'Soupe veloute de legume', 'monImg');
-INSERT INTO Article (ean13, price, vat, name, img) values ('1278651251705', 212, 5, 'Chou blanc', 'monImg');
-INSERT INTO Article (ean13, price, vat, name, img) values ('1278651251706', 123, 5, 'Tomate cerise', 'monImg');
-INSERT INTO Article (ean13, price, vat, name, img) values ('1278651251707', 321, 5, 'Melon', 'monImg');
-INSERT INTO Article (ean13, price, vat, name, img) values ('1278651251708', 1999, 20, 'Casque velo', 'monImg');
-INSERT INTO Article (ean13, price, vat, name, img) values ('1278651251709', 1199, 20, 'Reveil', 'monImg');
+INSERT INTO Article (ean13, price, vat, name, img) values ('1278651251702', 2.12, 5, '1 Kg Pomme', 'pomme.png');
+INSERT INTO Article (ean13, price, vat, name, img) values ('1278651251703', 5.21, 5, 'Chou rouge bio', 'monImg');
+INSERT INTO Article (ean13, price, vat, name, img) values ('1278651251704', 2.21, 5, 'Soupe veloute de legume', 'monImg');
+INSERT INTO Article (ean13, price, vat, name, img) values ('1278651251705', 2.12, 5, 'Chou blanc', 'monImg');
+INSERT INTO Article (ean13, price, vat, name, img) values ('1278651251706', 1.23, 5, 'Tomate cerise', 'monImg');
+INSERT INTO Article (ean13, price, vat, name, img) values ('1278651251707', 3.21, 5, 'Melon', 'monImg');
+INSERT INTO Article (ean13, price, vat, name, img) values ('1278651251708', 19.99, 20, 'Casque velo', 'monImg');
+INSERT INTO Article (ean13, price, vat, name, img) values ('1278651251709', 11.99, 20, 'Reveil', 'monImg');
 
 INSERT INTO Article_Category(categories_id, Article_ean13) values ('1', '1278651251702'); -- pomme produit frais
 INSERT INTO Article_Category(categories_id, Article_ean13) values ('2', '1278651251702'); -- pomme fruit
