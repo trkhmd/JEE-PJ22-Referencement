@@ -6,6 +6,7 @@ import fr.eservices.drive.model.Category;
 import fr.eservices.drive.repository.ArticleRepository;
 import fr.eservices.drive.repository.CategoryRepository;
 import fr.eservices.drive.web.dto.ArticleEntry;
+import fr.eservices.drive.web.dto.CategoryForm;
 import fr.eservices.drive.web.dto.SimpleResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,11 +14,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping(path="/articles")
@@ -46,7 +52,8 @@ public class ArticleController {
         @RequestParam(name = "name", required = false) String nameFilter,
         @RequestParam(name = "ref", required = false) String refFilter,
         @RequestParam(name = "page", defaultValue = "0") int page,
-        @RequestParam(name = "size", defaultValue = "10") int size
+        @RequestParam(name = "size", defaultValue = "10") int size,
+        @ModelAttribute("warning") String warning
         ){
         Page<Article> articles;
         PageRequest pageable = new PageRequest(page, size);
@@ -110,14 +117,72 @@ public class ArticleController {
         return "all_articles";
     }
 
-    @GetMapping(path="/{ean13}.html", produces="text/html")
-    public String getArticle(@PathVariable(name="ean13") String ean13, Model model) throws DataException {
+    @GetMapping(path="/edit/{ean13}")
+    public String getArticle(@PathVariable(name="ean13") String ean13, Model model, RedirectAttributes atts) {
         String trimmedEan13 = ean13.trim();
+        if(!articleRepository.exists(trimmedEan13))
+        {
+            atts.addFlashAttribute("warning", "Article with EAN: <strong>" + trimmedEan13 + "</strong> does not exist");
+            return "redirect:/articles.html";
+        }
         Article article = articleRepository.findByEan13(trimmedEan13);
+        List<CategoryForm> categories = getCategoriesForm(article.getEan13());
         model.addAttribute("article", article);
-        return "_article_info";
+        model.addAttribute("categories",categories);
+        return "edit_article";
     }
 
+    @PostMapping(path="/edit/{ean13}")
+    public String updateArticle(@PathVariable(name="ean13") String ean13, @Valid @ModelAttribute("article") ArticleEntry entry, 
+        BindingResult result, Model model ) 
+    {
+        String trimmedEan13 = ean13.trim();
+        if(!articleRepository.exists(trimmedEan13))
+            return "redirect:/articles.html";
+        model.addAttribute("categories", getCategoriesForm(entry.getEan13()));
+        if( result.hasErrors() ) {
+            model.addAttribute("error_alert", "Update failed, please check your inputs");
+            return "edit_article";
+        }
+        Article article = createArticleFromArticleEntry(entry);
+        articleRepository.save(article);
+        model.addAttribute("success_alert", "Article updated successfully");
+        return "edit_article";
+    }
+
+
+    /**
+     * get all categories and set the selected attribute to true if the article categories is in the categories list
+     * @param ean
+     * @return
+     */
+    public List<CategoryForm> getCategoriesForm(String ean) {
+        Article article = articleRepository.findByEan13(ean.trim());
+        List<Category> categories = categoryRepository.findAll();
+        List<CategoryForm> categoriesForm = new ArrayList<>();
+        for (Category c : categories) {
+            categoriesForm.add(new CategoryForm(c.getId(), c.getName(), article.getCategories().contains(c)));
+        }
+        return categoriesForm;
+    }
+
+    /**
+     * Create an article from an article entry
+     * @param entry the article entry
+     * @return the article
+     */
+    public Article createArticleFromArticleEntry(ArticleEntry entry) {
+        Article article = new Article();
+        article.setEan13(entry.getEan13());
+        article.setName(entry.getName());
+        article.setPrice(entry.getPrice());
+        article.setVat(entry.getVat());
+        article.setImg(entry.getImg());
+        for(String catId : entry.getCategories()) {
+            article.getCategories().add(categoryRepository.findById(catId));
+        }
+        return article;
+    }
 
     @ResponseBody
     @PostMapping(path="/add.json",consumes="application/json")

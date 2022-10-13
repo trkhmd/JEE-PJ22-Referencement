@@ -6,7 +6,13 @@
 <div class="container">
     <h1>All articles</h1>
 
-    <div class="row" style="margin:0px; margin-bottom:10px;">
+    <c:if test="${not empty warning}">
+        <div class="alert alert-warning" role="alert">
+            ${warning}
+        </div>
+    </c:if>
+
+    <div style="margin:0px; margin-bottom:10px;display:flex;justify-content:space-between;">
         <form class="form-inline">
             <input type="hidden" value="${articels.size}" name="size" />
             <div class="form-group">
@@ -14,7 +20,7 @@
                 <select class="form-control" id="category" name="cat">
                 <option value="">TOUS</option>
                 <c:forEach items="${categories}" var="category">
-                    <option value="${category.id}" >${category.name}</option>
+                    <option value="${category.id}" ${category.id == param.cat ? "selected=selected" : ""} >${category.name}</option>
                 </c:forEach>
                 </select>
             </div>
@@ -26,11 +32,13 @@
                 <label for="ref">Referance</label>
                 <input type="text" class="form-control" id="ref" name="ref" value="${param.ref}" placeholder="Enter the reference...">
             </div>
-            <button type="submit" class="btn btn-default">
+            <button type="submit" class="btn btn-primary">
                 <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                 Filter
             </button>
         </form>
+
+        <a href="articles/add" class="btn btn-primary">Nouveau +</a>
     </div>
     <%-- Display all articles --%>
     <table class="table table-bordered table-striped table-hover">
@@ -38,6 +46,8 @@
         <th>EAN</th>
         <th>Name</th>
         <th>Price</th>
+        <th>VAT</th>
+        <th>Category</th>
     </tr>
     <c:choose>
     <c:when test="${empty articles.content}">
@@ -48,9 +58,24 @@
     </c:choose>
     <c:forEach items="${articles.content}" var="art">
     <tr>
-        <td>${art.getEan13()}</td>
+        <td><a href="articles/edit/${art.getEan13()}.html">${art.getEan13()}</a></td>
         <td>${art.getName()}</td>
         <td><fmt:formatNumber value="${art.price / 100.0}" type="currency" currencySymbol="€"/></td>
+        <td>${art.vat} %</td>
+        <td>
+            <c:choose>
+                <c:when test="${empty art.categories}">
+                    <span class="text-muted">No category</span>
+                </c:when>
+                <c:otherwise>
+                    <ul>
+                        <c:forEach items="${art.categories}" var="cat">
+                            <li>${cat.getName()}</li>
+                        </c:forEach>
+                    </ul>
+                </c:otherwise>
+            </c:choose>
+        </td>
     </tr>
     </c:forEach>  
     </table>

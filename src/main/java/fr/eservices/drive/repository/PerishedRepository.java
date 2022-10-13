@@ -1,6 +1,5 @@
 package fr.eservices.drive.repository;
 
-import fr.eservices.drive.model.Article;
 import fr.eservices.drive.model.Perishable;
 import org.springframework.data.repository.CrudRepository;
 

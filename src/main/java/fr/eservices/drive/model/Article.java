@@ -1,6 +1,7 @@
 package fr.eservices.drive.model;
 
 import javax.persistence.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,12 +9,11 @@ import java.util.List;
 public class Article {
 	@Id
 	private String ean13;
+	private String name;
 	private int price;
 	private int vat;
-	private String name;
 	private String img;
-
-	@ManyToMany()
+	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Category> categories = new ArrayList<>();
 
 	public String getEan13() {
@@ -62,5 +62,17 @@ public class Article {
 
 	public void setCategories(List<Category> categories) {
 		this.categories = categories;
+	}
+
+	@Override
+	public String toString() {
+		return "Article{" +
+				"ean13='" + ean13 + '\'' +
+				", name='" + name + '\'' +
+				", price=" + price +
+				", vat=" + vat +
+				", img='" + img + '\'' +
+				", categories=" + categories +
+				'}';
 	}
 }
