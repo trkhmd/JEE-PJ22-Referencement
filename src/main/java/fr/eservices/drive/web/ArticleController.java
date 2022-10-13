@@ -81,11 +81,11 @@ public class ArticleController {
                 Category cat = categoryRepository.findById(catFilter.trim());
                 if( cat != null )
                 {
-                    articles = articleRepository.findByCategoriesAndNameLike(cat, nameFilter, pageable);
+                    articles = articleRepository.findByCategoriesAndNameIgnoreCaseLike(cat, nameFilter, pageable);
                 }
                 else
                 {
-                    articles = articleRepository.findByNameLike(nameFilter, pageable);
+                    articles = articleRepository.findByNameIgnoreCaseLike(nameFilter, pageable);
                 }
                 model.addAttribute("articles", articles);
             }

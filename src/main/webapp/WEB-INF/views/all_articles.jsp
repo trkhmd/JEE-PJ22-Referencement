@@ -77,13 +77,13 @@
             </c:choose>
         </td>
     </tr>
-    </c:forEach>  
+    </c:forEach>
     </table>
 
     <nav aria-label="Page navigation" style="display: flex;justify-content: space-between;">
         <ul class="pagination">
             <li>
-            <a href="?page=1&size=${articles.size}&cat=${param.cat}&name=${param.name}&ref=${param.ref}" aria-label="Begin">
+            <a href="?page=0&size=${articles.size}&cat=${param.cat}&name=${param.name}&ref=${param.ref}" aria-label="Begin">
                 <span aria-hidden="true">|&laquo;</span>
             </a>
             </li>
@@ -93,7 +93,7 @@
                 <li class="${ i == articles.number+1 ? 'active' : ''}"><a href="?page=${i-1}&size=${articles.size}&cat=${param.cat}&name=${param.name}&ref=${param.ref}">${i}</a></li>
             </c:forEach>
             <li>
-            <a href="?page=${articles.totalPages}&size=${articles.size}&cat=${param.cat}&name=${param.name}&ref=${param.ref}" aria-label="End">
+            <a href="?page=${articles.totalPages-1}&size=${articles.size}&cat=${param.cat}&name=${param.name}&ref=${param.ref}" aria-label="End">
                 <span aria-hidden="true">&raquo;|</span>
             </a>
             </li>
