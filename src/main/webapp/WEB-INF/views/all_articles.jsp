@@ -38,7 +38,7 @@
             </button>
         </form>
 
-        <a href="articles/add" class="btn btn-primary">Nouveau +</a>
+        <a href="articles/add.html" class="btn btn-primary">Nouveau +</a>
     </div>
     <%-- Display all articles --%>
     <table class="table table-bordered table-striped table-hover">
@@ -60,7 +60,7 @@
     <tr>
         <td><a href="articles/edit/${art.getEan13()}.html">${art.getEan13()}</a></td>
         <td>${art.getName()}</td>
-        <td><fmt:formatNumber value="${art.price / 100.0}" type="currency" currencySymbol="€"/></td>
+        <td><fmt:formatNumber value="${art.price}" type="currency" currencySymbol="€"/></td>
         <td>${art.vat} %</td>
         <td>
             <c:choose>

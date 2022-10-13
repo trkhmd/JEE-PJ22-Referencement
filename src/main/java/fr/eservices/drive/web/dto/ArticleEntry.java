@@ -14,7 +14,7 @@ public class ArticleEntry {
     @Size(min=13, max=13, message = "*Reference must be 13 characters long")
     private String ean13;
     @Min(value = 0, message = "*Price must be positive")
-    private int price;
+    private double price;
     @Min(value = 0, message = "*TVA must be at least 0") 
     @Max(value = 100, message = "*TVA must be less than 100")
     private int vat;
@@ -28,14 +28,14 @@ public class ArticleEntry {
     }
 
     public void setEan13(String ean13) {
-        this.ean13 = ean13;
+        this.ean13 = ean13.trim();
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

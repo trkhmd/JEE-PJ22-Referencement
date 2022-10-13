@@ -4,16 +4,11 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <div style="margin:20px">
-    <h2>Article Info</h2>
+    <h2>Create article</h2>
 
-    <c:if test="${not empty error_alert}">
+    <c:if test="${error_alert != null}">
         <div class="alert alert-danger" role="alert">
             <strong>${error_alert}</strong>
-        </div>
-    </c:if>
-    <c:if test="${not empty success_alert}">
-        <div class="alert alert-success" role="alert">
-            <strong>${success_alert}</strong>
         </div>
     </c:if>
 
@@ -21,7 +16,7 @@
     <div class="row">
         <div class="form-group col-md-6">
             <label for="fEan">EAN</label>
-            <form:input path="ean13" disabled="true" type="text" class="form-control" id="fEan" placeholder="EAN"/>
+            <form:input path="ean13" type="text" class="form-control" id="fEan" placeholder="EAN"/>
             <form:errors path="ean13" cssClass="text-danger"/>
         </div>
         <div class="form-group col-md-6">
@@ -48,20 +43,13 @@
     </div>
     <div class="form-group">
         <label for="fCat">Categories</label>
-            <ul style="list-style:none;">
-                <c:forEach items="${categories}" var="category">
-                    <c:choose>
-                        <c:when test="${category.checked == true}">
-                            <li><form:checkbox checked="true" path="categories" value="${category.cat.id}" label="${category.cat.name}"/></li>
-                        </c:when>
-                        <c:otherwise>
-                            <li><form:checkbox path="categories" value="${category.cat.id}" label="${category.cat.name}"/></li>
-                        </c:otherwise>
-                    </c:choose>
-                </c:forEach>
-            </ul>
-        </div>
-    
+        <ul style="list-style:none;">
+            <c:forEach items="${categories}" var="category">
+                <li><form:checkbox path="categories" value="${category.id}" label="${category.name}"/></li>
+            </c:forEach>
+        </ul>
+    </div>
+
     <form:button type="submit" class="btn btn-primary">
         <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
         Ok

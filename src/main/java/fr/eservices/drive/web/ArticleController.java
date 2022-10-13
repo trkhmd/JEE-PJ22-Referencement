@@ -7,7 +7,6 @@ import fr.eservices.drive.repository.ArticleRepository;
 import fr.eservices.drive.repository.CategoryRepository;
 import fr.eservices.drive.web.dto.ArticleEntry;
 import fr.eservices.drive.web.dto.CategoryForm;
-import fr.eservices.drive.web.dto.SimpleResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -96,7 +95,9 @@ public class ArticleController {
     }
 
     @GetMapping(path="/edit/{ean13}")
-    public String getArticle(@PathVariable(name="ean13") String ean13, Model model, RedirectAttributes atts) {
+    public String updateArticle(@PathVariable(name="ean13") String ean13, Model model, RedirectAttributes atts, 
+        @ModelAttribute("success_alert") String success_alert) 
+    {
         String trimmedEan13 = ean13.trim();
         if(!articleRepository.exists(trimmedEan13))
         {
@@ -112,7 +113,7 @@ public class ArticleController {
 
     @PostMapping(path="/edit/{ean13}")
     public String updateArticle(@PathVariable(name="ean13") String ean13, @Valid @ModelAttribute("article") ArticleEntry entry, 
-        BindingResult result, Model model ) 
+        BindingResult result, Model model )
     {
         String trimmedEan13 = ean13.trim();
         if(!articleRepository.exists(trimmedEan13))
@@ -162,77 +163,33 @@ public class ArticleController {
         return article;
     }
 
-    @ResponseBody
-    @PostMapping(path="/add.json",consumes="application/json")
-    public SimpleResponse add(@RequestBody ArticleEntry artEntry) {
-        SimpleResponse res = new SimpleResponse();
-        if (artEntry.getName() == null ||
-                artEntry.getEan13() == null ||
-                artEntry.getImg() == null ||
-                artEntry.getPrice() <=0 ||
-                artEntry.getVat()<= 0){
-            res.status =  SimpleResponse.Status.ERROR;
-            res.message = "Bad request verify entry";
-            return res;
-        }
-        String trimmedEan13 = artEntry.getEan13().trim();
-        String trimmedName = artEntry.getName().trim();
-        String trimmedImg = artEntry.getImg().trim();
-        if(articleRepository.findByEan13(trimmedEan13) != null) {
-            res.status =  SimpleResponse.Status.ERROR;
-            res.message = "Ean13 is already used";
-            return res;
-        }
+    @GetMapping(path="/add")
+    public String addArticle(Model model) {
+        model.addAttribute("article", new ArticleEntry());
+        model.addAttribute("categories", categoryRepository.findAll());
+        return "add_article";
+    }
 
-        if(trimmedName.length() <3){
-            res.status =  SimpleResponse.Status.ERROR;
-            res.message = "Name too short";
-            return res;
+    @PostMapping(path="/add")
+    public String addArticle(@Valid @ModelAttribute("article") ArticleEntry entry, BindingResult result, Model model, 
+        RedirectAttributes atts) 
+    {
+        if( result.hasErrors() ) {
+            model.addAttribute("categories", categoryRepository.findAll());
+            model.addAttribute("error_alert", "Add failed, please check your inputs");
+            return "add_article";
         }
-
-        if(artEntry.getVat()>100){
-            res.status =  SimpleResponse.Status.ERROR;
-            res.message = "Bad TVA";
-            return res;
+        Article article = createArticleFromArticleEntry(entry);
+        if( articleRepository.exists(article.getEan13()) ) {
+            model.addAttribute("categories", categoryRepository.findAll());
+            model.addAttribute("error_alert", "Add failed, article with EAN: <strong>" + article.getEan13() + "</strong> already exists");
+            return "add_article";
         }
-
-        if (trimmedEan13.length() != 13){
-            res.status =  SimpleResponse.Status.ERROR;
-            res.message = "Bad ean13:" + trimmedEan13;
-            return res;
-        }
-
-        //TODO: check category
-
-        Article article = new Article();
-        article.setPrice(artEntry.getPrice());
-        article.setName(trimmedName);
-        //TODO: add categories
-        //article.setCategories(artEntry.getCategories());
-        article.setImg(trimmedImg);
-        article.setEan13(trimmedEan13);
-        article.setVat(artEntry.getVat());
         articleRepository.save(article);
-        res.status = SimpleResponse.Status.OK;
-        res.message = "Article Added ean13: " + trimmedEan13;
-        return res;
+        atts.addFlashAttribute("success_alert", "Article added successfully");
+        return "redirect:/articles/edit/" + article.getEan13()+".html";
     }
 
-    @ResponseBody
-    @DeleteMapping(path = "/{ean13}")
-    public SimpleResponse delete(@PathVariable String ean13) {
-        String trimmedEan13 = ean13.trim();
-        SimpleResponse res = new SimpleResponse();
-        Article article = articleRepository.findByEan13(trimmedEan13);
-        if(article == null) {
-            res.status = SimpleResponse.Status.ERROR;
-            res.message = "article id not found";
-            return res;
-        }
-        articleRepository.delete(article);
-        res.status = SimpleResponse.Status.OK;
-        res.message = "";
-        return res;
-    }
+
 }
 
