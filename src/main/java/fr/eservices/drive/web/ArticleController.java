@@ -54,65 +54,43 @@ public class ArticleController {
         @RequestParam(name = "page", defaultValue = "0") int page,
         @RequestParam(name = "size", defaultValue = "10") int size,
         @ModelAttribute("warning") String warning
-        ){
-        Page<Article> articles;
+        )
+    {
         PageRequest pageable = new PageRequest(page, size);
-        
+        Page<Article> articles;
         List<Category> categories = categoryRepository.findAll();
 
-        categories = categoryRepository.findAll();
+        // si on a pas de filtres appliqués
         if( (catFilter == null || catFilter.isEmpty()) && (nameFilter == null || nameFilter.isEmpty() ) && (refFilter == null || refFilter.isEmpty() ) ){
             articles = articleRepository.findAll(pageable);
-        } else {
-            Category cat;
-            if(catFilter != null && !catFilter.isEmpty())
+            model.addAttribute("articles", articles);
+        } 
+        else
+        {
+            // Pour le filtrage, la priorité est donnée à la référence
+            // si on a une référence, on ignore les autres filtres
+            refFilter = refFilter.trim();
+            if( refFilter.length() > 0 )
             {
-                cat = categoryRepository.findById(catFilter);
-                if(nameFilter != null && !nameFilter.trim().isEmpty())
-                {
-                    nameFilter = "%" + nameFilter + "%";
-                    if(refFilter != null && !refFilter.trim().isEmpty())
-                    {
-                        articles = articleRepository.findByCategoriesAndNameLikeAndEan13Like(cat, nameFilter, refFilter, pageable);
-                    }
-                    else
-                    {
-                        articles = articleRepository.findByCategoriesAndNameLike(cat, nameFilter, pageable);
-                    }
-                }
-                else
-                {
-                    if(refFilter != null && !refFilter.trim().isEmpty())
-                    {
-                        articles = articleRepository.findByCategoriesAndEan13Like(cat, refFilter, pageable);
-                    }
-                    else
-                    {
-                        articles = articleRepository.findByCategories(cat, pageable);
-                    }
-                }
+                articles = articleRepository.findByEan13(refFilter, pageable);
+                model.addAttribute("articles", articles);
             }
-            else
+            else if( catFilter != null && nameFilter != null )
             {
-                if(nameFilter != null && !nameFilter.trim().isEmpty())
+                // Sinon, on filtre par nom et catégorie
+                nameFilter = "%"+nameFilter.trim()+"%";
+                Category cat = categoryRepository.findById(catFilter.trim());
+                if( cat != null )
                 {
-                    nameFilter = "%" + nameFilter + "%";
-                    if(refFilter != null && !refFilter.trim().isEmpty())
-                    {
-                        articles = articleRepository.findByNameLikeAndEan13Like(nameFilter, refFilter, pageable);
-                    }
-                    else
-                    {
-                        articles = articleRepository.findByNameLike(nameFilter, pageable);
-                    }
+                    articles = articleRepository.findByCategoriesAndNameLike(cat, nameFilter, pageable);
                 }
                 else
                 {
-                    articles = articleRepository.findByEan13Like(refFilter, pageable);
+                    articles = articleRepository.findByNameLike(nameFilter, pageable);
                 }
+                model.addAttribute("articles", articles);
             }
         }
-        model.addAttribute("articles", articles);
         model.addAttribute("categories", categories);
         return "all_articles";
     }

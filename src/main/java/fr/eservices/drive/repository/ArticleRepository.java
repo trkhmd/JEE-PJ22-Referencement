@@ -13,6 +13,7 @@ public interface ArticleRepository extends CrudRepository<Article,String> {
     Article findByEan13(String ean13);
     Page<Article> findByCategories(Category cat, Pageable pageable);
     Page<Article> findByNameLike(String nameFilter, Pageable pageable);
+    Page<Article> findByEan13(String refFilter, Pageable pageable);
     Page<Article> findByEan13Like(String refFilter, Pageable pageable);
     Page<Article> findByCategoriesAndNameLikeAndEan13Like(Category cat, String nameFilter, String refFilter, Pageable pageable);
     Page<Article> findByCategoriesAndNameLike(Category cat, String nameFilter, Pageable pageable);
