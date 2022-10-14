@@ -12,7 +12,6 @@ import fr.eservices.drive.web.dto.StockModifyEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +20,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 @Controller
-@RequestMapping(path="/stock")
+@RequestMapping(path="/stocks")
 public class StockController {
 
     @Autowired
@@ -41,9 +40,7 @@ public class StockController {
         PrintWriter w = new PrintWriter( out );
         ex.printStackTrace(w);
         w.close();
-        return
-                "ERROR"
-                        + "<!--\n" + out.toString() + "\n-->";
+        return "ERROR"+ "<!--\n" + out.toString() + "\n-->";
     }
 
     /**
@@ -54,7 +51,7 @@ public class StockController {
     @GetMapping
     public String getAllStock(Model model) {
         List<Product> products = productRepository.findAll();
-        List<Perishable> perishables = perishableRepository.findAll();
+        List<Perishable> perishables = perishableRepository.findAllByOrderByBestBefore();
         model.addAttribute("products", products);
         model.addAttribute("perishables", perishables);
         return "_stocks";

@@ -1,22 +1,47 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ include file="_header.jsp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ page import="fr.eservices.drive.model.Cart" %>
-<%@ page import="fr.eservices.drive.model.Article" %>
+<%@ page contentType="text/html; charset=UTF-8" %>
 
-<pre>
-Panier
-    <c:if test="${cart == null || cart.articles.size() == 0}">
-        <p>Aucun article</p>
-    </c:if>
-    <c:if test="${cart.articles.size() > 0}">
-        <c:forEach items="${cart.articles}" var="article">
-            <p><c:out value="${article.name}"/> <fmt:formatNumber value = "${article.price / 100}" type = "currency" currencySymbol="$"/></p>
-        </c:forEach>
-    </c:if>
+<div class="container">
+    <h1>Stock</h1>
 
+    <%-- Display all products --%>
+    <table class="table table-bordered table-striped table-hover">
+    <tr>
+        <th>EAN</th>
+        <th>Stock ID</th>
+        <th>Quantity</th>
+        <th>lot</th>
+        <th>DLC</th>
+    </tr>
+    <c:choose>
+        <c:when test="${empty products and empty perishables}">
+            <tr>
+                <td colspan="6">No articles found</td>
+            </tr>
+        </c:when>
+    </c:choose>
+    <c:forEach items="${products}" var="stock">
+        <tr>
+            <td><a href="articles/edit/${stock.article.ean13}.html">${stock.article.ean13}</a></td>
+            <td>${stock.id}</td>
+            <td>${stock.quantity}</td>
+            <td></td>
+            <td></td>
+        </tr>
+    </c:forEach>
+    <c:forEach items="${perishables}" var="stock">
+        <tr>
+            <td>${stock.article.ean13}</td>
+            <td>${stock.id}</td>
+            <td>${stock.quantity}</td>
+            <td>${stock.lot}</td>
+            <td>${stock.bestBefore}</td>
+        </tr>
+    </c:forEach>
+    </table>
 
-</pre>
-<!-- TODO: IF NEEDED
-<a class="btn btn-primary" href="">Commander</a>
--->
+</div>
+
+<%@ include file="_footer.jsp" %>

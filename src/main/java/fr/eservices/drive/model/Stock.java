@@ -12,7 +12,7 @@ public class Stock {
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Article article;
     private int quantity;
 
