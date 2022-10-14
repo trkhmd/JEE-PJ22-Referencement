@@ -29,7 +29,7 @@
                 <input type="text" class="form-control" id="name" name="name" value="${param.name}" placeholder="Enter the name...">
             </div>
             <div class="form-group">
-                <label for="ref">Referance</label>
+                <label for="ref">Reference</label>
                 <input type="text" class="form-control" id="ref" name="ref" value="${param.ref}" placeholder="Enter the reference...">
             </div>
             <button type="submit" class="btn btn-primary">
