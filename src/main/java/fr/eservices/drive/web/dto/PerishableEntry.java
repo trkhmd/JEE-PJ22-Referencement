@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class PerishableEntry {
     private String ean13;
-    @JsonFormat(pattern="dd-MM-yyyy")
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date bestBefore;
 
     private String lot;

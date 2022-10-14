@@ -1,7 +1,7 @@
 INSERT INTO Category (id, name) values ('1', 'Produit frais');
-INSERT INTO Category (id, name) values ('4', 'Accessoires');
 INSERT INTO Category (id, name) values ('2', 'Fruit');
 INSERT INTO Category (id, name) values ('3', 'Légume');
+INSERT INTO Category (id, name) values ('4', 'Accessoires');
 INSERT INTO Category (id, name) values ('5', 'Soupe');
 INSERT INTO Category (id, name) values ('6', 'Boisson');
 INSERT INTO Category (id, name) values ('7', 'Materiel informatique');
@@ -62,9 +62,6 @@ INSERT INTO Article (ean13, price, vat, name, img) values ('1234567890052', 1500
 INSERT INTO Article (ean13, price, vat, name, img) values ('1234567890053', 1200.99, 20, 'Macbook Air', 'monImg');
 INSERT INTO Article (ean13, price, vat, name, img) values ('1234567890054', 1620.99, 20, 'Macbook Pro Retina', 'monImg');
 INSERT INTO Article (ean13, price, vat, name, img) values ('1234567890055', 1345.99, 20, 'Macbook Pro 13 pouces', 'monImg');
-
-
-
 
 INSERT INTO Article_Category(categories_id, Article_ean13) values ('1', '1234567890002'); -- pomme produit frais
 INSERT INTO Article_Category(categories_id, Article_ean13) values ('2', '1234567890002'); -- pomme fruit
