@@ -1,8 +1,5 @@
 package fr.eservices.drive.web.dto;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ProductEntry {
     private String ean13;
     private int quantity;

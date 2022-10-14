@@ -12,6 +12,7 @@ import fr.eservices.drive.web.dto.StockModifyEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -93,8 +94,14 @@ public class StockController {
      * @param id Stock id
      * @return HTTP.response
      */
-    @DeleteMapping(path = "/{id}")
-    public SimpleResponse delete(@PathVariable String id) {
+    @GetMapping(value = "/{id}.html",produces="text/html")
+    public String getStock(@PathVariable String id, Model model) {
+        stockRepository.findById(id);
+        return "_stocks";
+    }
+    @ResponseBody
+    @DeleteMapping(value="/{id}.json")
+    public SimpleResponse deleteStock(@PathVariable String id) {
         SimpleResponse res = new SimpleResponse();
         String trimmedId = id.trim();
         Stock stock = stockRepository.findById(trimmedId);

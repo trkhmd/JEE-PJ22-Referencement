@@ -45,24 +45,25 @@ public class PerishableController {
                         + "<!--\n" + out.toString() + "\n-->";
     }
 
-    @GetMapping()
+    @GetMapping(path="/all.html", produces="text/html")
     public String getAllProducts(Model model){
         List<Perishable> perishables = perishableRepository.findAll();
         model.addAttribute("perishables", perishables);
         return "all_perishables";
     }
 
-    @GetMapping(path = "/perished")
+    @GetMapping(path = "/perished.html", produces="text/html")
     public String getAllProductsPerished(Model model){
         List<Perishable> perishables = perishableRepository.findAll();
         List<Perishable> perishedList = new ArrayList<>();
         for(Perishable perishable : perishables) {
+            System.out.println("BESTBEFORE:" + perishable.getBestBefore().toString());
             if(perishable.getBestBefore().before(Date.from(Instant.now()))) {
                 perishedList.add(perishable);
             }
         }
-        model.addAttribute("perishedList", perishedList);
-        return "all_perished";
+        model.addAttribute("perishables", perishedList);
+        return "perished_perishables";
     }
 
     @GetMapping(path="/ean13/{ean13}.html", produces="text/html")
@@ -74,7 +75,7 @@ public class PerishableController {
         return "_perishables_info";
     }
 
-    @GetMapping(path="/{id}.html", produces="text/html")
+    @GetMapping(path="/stock/{id}.html", produces="text/html")
     public String getPerishableByStockId(@PathVariable(name="id") String id, Model model) throws DataException {
         String trimmedId = id.trim();
         Perishable perishable = perishableRepository.findById(trimmedId);
@@ -85,7 +86,6 @@ public class PerishableController {
     @GetMapping(path = "/add.html", produces="text/html")
     //Show the form to add a new perishable
     public ModelAndView add(Model model) {
-
         return new ModelAndView("_perishable_add", "PerishableEntry", new PerishableEntry());
     }
 
@@ -108,8 +108,6 @@ public class PerishableController {
         System.out.println(trimmedEan13);
 
         Article article = articleRepository.findByEan13(trimmedEan13);
-        List<Article> test = articleRepository.findAll();
-        System.out.println(test.toString());
 
         if(article == null) {
             res.status =  SimpleResponse.Status.ERROR;
@@ -143,6 +141,8 @@ public class PerishableController {
         perishable.setLot(trimmedLot);
         perishable.setBestBefore(perishableEntry.getBestBefore());
         perishable.setQuantity(perishableEntry.getQuantity());
+
+        System.out.println("save perishable " + perishable.getLot());
 
         perishableRepository.save(perishable);
         res.status = SimpleResponse.Status.OK;

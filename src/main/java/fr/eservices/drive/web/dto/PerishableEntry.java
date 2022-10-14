@@ -2,13 +2,11 @@ package fr.eservices.drive.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class PerishableEntry {
     private String ean13;
-    @JsonFormat(pattern="dd-MM-yyyy")
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date bestBefore;
 
     private String lot;

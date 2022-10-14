@@ -25,6 +25,7 @@
 <body>
 <%--@elvariable id="PerishableEntry" type="fr.eservices.drive.web.dto.PerishableEntry"--%>
 <h1>Ajouter un article perisable</h1>
+<div id="alertbox"></div>
     <form:form action="/projet/perishable/add.json" modelAttribute="PerishableEntry" method="POST" enctype='application/json' id="form">
 
 
@@ -57,8 +58,7 @@
     var form = document.getElementById('form');
     form.addEventListener('submit', function (e) {
         e.preventDefault();
-        var data = new FormData(form);
-        console.log(data);
+        const data = new FormData(form);
         $.ajax(
             {
                 method: 'POST',
@@ -72,7 +72,13 @@
                     quantity: data.get('quantity')
                 }),
             }
-        )
+        ).done(function(data){
+            if(data['status'] !== 'OK') {
+                JSON.stringify( $('#alertbox').html('<div class="alert alert-warning" id="alertbox" role="alert">'+ data['message'] +'</div>'));
+            } else {
+                window.location.href = "/projet/articles.html";
+            }
+        });
     });
 </script>
 

@@ -1,6 +1,7 @@
 package fr.eservices.drive.model;
 
 import javax.persistence.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,12 +9,11 @@ import java.util.List;
 public class Article {
 	@Id
 	private String ean13;
-	private double price;
-	private double vat;
 	private String name;
+	private double price;
+	private int vat;
 	private String img;
-
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Category> categories = new ArrayList<>();
 
 	public String getEan13() {
@@ -32,11 +32,11 @@ public class Article {
 		this.price = price;
 	}
 
-	public double getVat() {
+	public int getVat() {
 		return vat;
 	}
 
-	public void setVat(double tva) {
+	public void setVat(int tva) {
 		this.vat = tva;
 	}
 
@@ -62,5 +62,17 @@ public class Article {
 
 	public void setCategories(List<Category> categories) {
 		this.categories = categories;
+	}
+
+	@Override
+	public String toString() {
+		return "Article{" +
+				"ean13='" + ean13 + '\'' +
+				", name='" + name + '\'' +
+				", price=" + price +
+				", vat=" + vat +
+				", img='" + img + '\'' +
+				", categories=" + categories +
+				'}';
 	}
 }

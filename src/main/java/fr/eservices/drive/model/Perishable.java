@@ -10,7 +10,7 @@ import java.util.Date;
 @Entity
 public class Perishable extends Stock {
     @Temporal(TemporalType.DATE)
-    @JsonFormat(pattern="dd-MM-yyyy")
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private Date bestBefore;
 
     private String lot;
