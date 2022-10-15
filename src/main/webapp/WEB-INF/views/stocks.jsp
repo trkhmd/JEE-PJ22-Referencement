@@ -6,6 +6,10 @@
 <div class="container">
     <h1>Stock</h1>
 
+    <div style="margin:0px; margin-bottom:10px;display:flex;justify-content:space-between;">
+        <a href="perishable/add.html" class="btn btn-primary">Create perishable</a>
+    </div>
+
     <%-- Display all products --%>
     <table class="table table-bordered table-striped table-hover">
     <tr>
@@ -27,8 +31,7 @@
             <td><a href="articles/edit/${stock.article.ean13}.html">${stock.article.ean13}</a></td>
             <td>${stock.id}</td>
             <td>${stock.quantity}</td>
-            <td></td>
-            <td></td>
+            <td colspan="2"></td>
         </tr>
     </c:forEach>
     <c:forEach items="${perishables}" var="stock">

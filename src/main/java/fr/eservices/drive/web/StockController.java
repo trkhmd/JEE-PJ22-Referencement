@@ -54,7 +54,7 @@ public class StockController {
         List<Perishable> perishables = perishableRepository.findAllByOrderByBestBefore();
         model.addAttribute("products", products);
         model.addAttribute("perishables", perishables);
-        return "_stocks";
+        return "stocks";
     }
 
     /**
