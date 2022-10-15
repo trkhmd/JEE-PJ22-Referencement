@@ -41,7 +41,7 @@
         <div class="form-group col-md-6">
             <label for="fIsPerishable">Article type</label>
             <ul style="list-style:none;">
-                <li><form:radiobutton path="isPerishable" value="false" label="Classic product" /></li>
+                <li><form:radiobutton path="isPerishable" value="false" label="Classic product" checked="checked" /></li>
                 <li><form:radiobutton path="isPerishable" value="true" label="Perishable"/></li>
                 <li><form:errors path="isPerishable" cssClass="text-danger"/></li>
             </ul>
@@ -79,6 +79,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('input[name="isPerishable"]').change(function() {
+            console.log($(this).val());
             if ($(this).val() == "false") {
                 $('#fQty').parent().show();
             } else {

@@ -1,6 +1,5 @@
 package fr.eservices.drive.web;
 
-import fr.eservices.drive.dao.DataException;
 import fr.eservices.drive.model.Article;
 import fr.eservices.drive.model.Category;
 import fr.eservices.drive.model.Product;
@@ -12,15 +11,12 @@ import fr.eservices.drive.web.dto.CategoryForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,17 +34,6 @@ public class ArticleController {
 
     @Autowired
     ProductRepository productRepository;
-
-    @ExceptionHandler(DataException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ResponseBody
-    public String dataExceptionHandler(Exception ex) {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        PrintWriter w = new PrintWriter( out );
-        ex.printStackTrace(w);
-        w.close();
-        return "ERROR"+"<!--\n" + out.toString() + "\n-->";
-    }
 
     @GetMapping()
     public String getAllArticles(Model model, 
@@ -99,6 +84,39 @@ public class ArticleController {
         return "all_articles";
     }
 
+    @GetMapping(path = "/add")
+    public String addArticle(Model model) {
+        model.addAttribute("article", new ArticleEntry());
+        model.addAttribute("categories", categoryRepository.findAll());
+        return "add_article";
+    }
+
+    @PostMapping(path = "/add")
+    public String addArticle(@Valid @ModelAttribute("article") ArticleEntry entry, BindingResult result, Model model,
+            RedirectAttributes atts) {
+        if (result.hasErrors()) {
+            model.addAttribute("categories", categoryRepository.findAll());
+            model.addAttribute("error_alert", "Add failed, please check your inputs");
+            return "add_article";
+        }
+        Article article = createArticleFromArticleEntry(entry);
+        if (articleRepository.exists(article.getEan13())) {
+            model.addAttribute("categories", categoryRepository.findAll());
+            model.addAttribute("error_alert",
+                    "Add failed, article with EAN: <strong>" + article.getEan13() + "</strong> already exists");
+            return "add_article";
+        }
+        articleRepository.save(article);
+        if (!article.getIsPerishable() && entry.getQuantity() > 0) {
+            Product product = new Product();
+            product.setArticle(article);
+            product.setQuantity(entry.getQuantity());
+            productRepository.save(product);
+        }
+        atts.addFlashAttribute("success_alert", "Article added successfully");
+        return "redirect:/articles/edit/" + article.getEan13() + ".html";
+    }
+
     @GetMapping(path="/edit/{ean13}")
     public String updateArticle(@PathVariable(name="ean13") String ean13, Model model, RedirectAttributes atts, 
         @ModelAttribute("success_alert") String success_alert) 
@@ -110,15 +128,16 @@ public class ArticleController {
             return "redirect:/articles.html";
         }
         Article article = articleRepository.findByEan13(trimmedEan13);
+        ArticleEntry entry = createArticleEntryFromArticle(article);
         List<CategoryForm> categories = getCategoriesForm(article.getEan13());
-        model.addAttribute("article", article);
+        model.addAttribute("article", entry);
         model.addAttribute("categories",categories);
         return "edit_article";
     }
 
     @PostMapping(path="/edit/{ean13}")
     public String updateArticle(@PathVariable(name="ean13") String ean13, @Valid @ModelAttribute("article") ArticleEntry entry, 
-        BindingResult result, Model model )
+        BindingResult result, Model model, RedirectAttributes atts)
     {
         String trimmedEan13 = ean13.trim();
         if(!articleRepository.exists(trimmedEan13))
@@ -130,8 +149,17 @@ public class ArticleController {
         }
         Article article = createArticleFromArticleEntry(entry);
         articleRepository.save(article);
-        model.addAttribute("success_alert", "Article updated successfully");
-        return "edit_article";
+        if( !article.getIsPerishable() && entry.getQuantity() >= 0 )
+        {
+            Product product = productRepository.findByArticle(article);
+            if( product == null )
+                product = new Product();
+            product.setArticle(articleRepository.findByEan13(article.getEan13()));
+            product.setQuantity(entry.getQuantity());
+            productRepository.save(product);
+        }
+        atts.addFlashAttribute("success_alert", "Article updated successfully");
+        return "redirect:/articles/edit/" + article.getEan13() + ".html";
     }
 
 
@@ -169,37 +197,28 @@ public class ArticleController {
         return article;
     }
 
-    @GetMapping(path="/add")
-    public String addArticle(Model model) {
-        model.addAttribute("article", new ArticleEntry());
-        model.addAttribute("categories", categoryRepository.findAll());
-        return "add_article";
-    }
-
-    @PostMapping(path="/add")
-    public String addArticle(@Valid @ModelAttribute("article") ArticleEntry entry, BindingResult result, Model model, 
-        RedirectAttributes atts) 
-    {
-        if( result.hasErrors() ) {
-            model.addAttribute("categories", categoryRepository.findAll());
-            model.addAttribute("error_alert", "Add failed, please check your inputs");
-            return "add_article";
+    /**
+     * Create an article entry from an article
+     * @param article the article
+     * @return the article entry
+     */
+    public ArticleEntry createArticleEntryFromArticle(Article article) {
+        ArticleEntry entry = new ArticleEntry();
+        entry.setEan13(article.getEan13());
+        entry.setName(article.getName());
+        entry.setPrice(article.getPrice());
+        entry.setVat(article.getVat());
+        entry.setIsPerishable(article.getIsPerishable());
+        entry.setImg(article.getImg());
+        if( !article.getIsPerishable() )
+        {
+            Product product = productRepository.findByArticle(article);
+            if( product != null )
+                entry.setQuantity(product.getQuantity());
+            else
+                entry.setQuantity(0);
         }
-        Article article = createArticleFromArticleEntry(entry);
-        if( articleRepository.exists(article.getEan13()) ) {
-            model.addAttribute("categories", categoryRepository.findAll());
-            model.addAttribute("error_alert", "Add failed, article with EAN: <strong>" + article.getEan13() + "</strong> already exists");
-            return "add_article";
-        }
-        articleRepository.save(article);
-        if( !article.getIsPerishable() && entry.getQuantity() > 0 ) {
-            Product product = new Product();
-            product.setArticle(article);
-            product.setQuantity(entry.getQuantity());
-            productRepository.save(product);
-        }
-        atts.addFlashAttribute("success_alert", "Article added successfully");
-        return "redirect:/articles/edit/" + article.getEan13()+".html";
+        return entry;
     }
 
 

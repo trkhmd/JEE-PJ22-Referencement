@@ -2,6 +2,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ page import="fr.eservices.drive.web.dto.ArticleEntry" %>
 
 <div style="margin:20px">
     <h2>Article Info</h2>
@@ -42,25 +43,34 @@
             <form:errors path="vat" cssClass="text-danger"/>
         </div>
     </div>
-    <div class="form-group">
-        <label for="fImg">Image</label>
-        <form:input path="img" type="text" class="form-control" id="fImg" placeholder="Image"/>
+    <div class="row">
+        <c:if test="${article.isPerishable == false}">
+            <div class="form-group col-md-6">
+                <label for="fQty">Quantity</label>
+                <form:input path="quantity" type="number" class="form-control" id="fQty" placeholder="Quantity"/>
+                <form:errors path="quantity" cssClass="text-danger"/>
+            </div>
+        </c:if>
+        <div class="form-group col-md-6">
+            <label for="fImg">Image</label>
+            <form:input path="img" type="text" class="form-control" id="fImg" placeholder="Image"/>
+        </div>
     </div>
     <div class="form-group">
         <label for="fCat">Categories</label>
-            <ul style="list-style:none;">
-                <c:forEach items="${categories}" var="category">
-                    <c:choose>
-                        <c:when test="${category.checked == true}">
-                            <li><form:checkbox checked="true" path="categories" value="${category.cat.id}" label="${category.cat.name}"/></li>
-                        </c:when>
-                        <c:otherwise>
-                            <li><form:checkbox path="categories" value="${category.cat.id}" label="${category.cat.name}"/></li>
-                        </c:otherwise>
-                    </c:choose>
-                </c:forEach>
-            </ul>
-        </div>
+        <ul style="list-style:none;">
+            <c:forEach items="${categories}" var="category">
+                <c:choose>
+                    <c:when test="${category.checked == true}">
+                        <li><form:checkbox checked="true" path="categories" value="${category.cat.id}" label="${category.cat.name}"/></li>
+                    </c:when>
+                    <c:otherwise>
+                        <li><form:checkbox path="categories" value="${category.cat.id}" label="${category.cat.name}"/></li>
+                    </c:otherwise>
+                </c:choose>
+            </c:forEach>
+        </ul>
+    </div>
     
     <form:button type="submit" class="btn btn-primary">
         <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
