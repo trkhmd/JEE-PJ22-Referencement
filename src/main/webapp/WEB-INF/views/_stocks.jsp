@@ -1,22 +1,47 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ page import="fr.eservices.drive.model.Cart" %>
-<%@ page import="fr.eservices.drive.model.Article" %>
+<%@ page contentType="text/html; charset=UTF-8" %>
+<h1>Stock</h1>
 
-<pre>
-Panier
-    <c:if test="${cart == null || cart.articles.size() == 0}">
-        <p>Aucun article</p>
-    </c:if>
-    <c:if test="${cart.articles.size() > 0}">
-        <c:forEach items="${cart.articles}" var="article">
-            <p><c:out value="${article.name}"/> <fmt:formatNumber value = "${article.price / 100}" type = "currency" currencySymbol="$"/></p>
-        </c:forEach>
-    </c:if>
+<div style="margin:0px; margin-bottom:10px;display:flex;justify-content:space-between;">
+  <a href="perishable/add.html" class="btn btn-primary">Create perishable</a>
+</div>
 
+<%-- Display all products --%>
+<table class="table table-bordered table-striped table-hover">
+  <tr>
+    <th>EAN</th>
+    <th>Article name</th>
+    <th>Lot</th>
+    <th>DLC</th>
+    <th>Quantity</th>
+    <th>Actions</th>
+  </tr>
+  <c:choose>
+    <c:when test="${empty products and empty perishables}">
+      <tr>
+        <td colspan="6">No articles found</td>
+      </tr>
+    </c:when>
+  </c:choose>
+  <c:forEach items="${products}" var="stock">
+    <tr>
+      <td><a href="articles/edit/${stock.article.ean13}.html">${stock.article.ean13}</a></td>
+      <td>${stock.article.name}</td>
+      <td colspan="2"></td>
+      <td>${stock.quantity}</td>
+      <td><span class="glyphicon glyphicon-plus-sign addStock" data-ref="${stock.id}" data-quantity="${stock.quantity}"></span><span class="glyphicon glyphicon-minus-sign removeStock" data-ref="${stock.id}" data-quantity="${stock.quantity}"></span></td>
+    </tr>
+  </c:forEach>
+  <c:forEach items="${perishables}" var="stock">
+    <tr>
+      <td>${stock.article.ean13}</td>
+      <td>${stock.article.name}</td>
+      <td>${stock.lot}</td>
+      <td>${stock.bestBefore}</td>
+      <td>${stock.quantity}</td>
+      <td><span class="glyphicon glyphicon-plus-sign addStock" data-ref="${stock.id}" data-quantity="${stock.quantity}"> </span><span class="glyphicon glyphicon-minus-sign removeStock" data-ref="${stock.id}" data-quantity="${stock.quantity}"></span></td>
+    </tr>
+  </c:forEach>
+</table>
 
-</pre>
-<!-- TODO: IF NEEDED
-<a class="btn btn-primary" href="">Commander</a>
--->

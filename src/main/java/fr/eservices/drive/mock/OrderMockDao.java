@@ -31,42 +31,42 @@ public class OrderMockDao implements OrderDao {
         this.articleRepository = articleRepository;
         {
             ArticleOrder articleOrder = new ArticleOrder();
-            articleOrder.setArticle(articleRepository.findByEan13("1278651251702"));
+            articleOrder.setArticle(articleRepository.findByEan13("1234567890032"));
             articleOrder.setArticleStatus(ArticleStatus.DELIVERED);
             articleOrder.setQuantity(2);
 
             ArticleOrder articleOrder1 = new ArticleOrder();
-            articleOrder1.setArticle(articleRepository.findByEan13("1278651251703"));
+            articleOrder1.setArticle(articleRepository.findByEan13("1234567890030"));
             articleOrder1.setArticleStatus(ArticleStatus.DELIVERED);
             articleOrder1.setQuantity(1);
 
             ArticleOrder articleOrder2 = new ArticleOrder();
-            articleOrder2.setArticle(articleRepository.findByEan13("1278651251704"));
+            articleOrder2.setArticle(articleRepository.findByEan13("1234567890028"));
             articleOrder2.setArticleStatus(ArticleStatus.RETURNED);
             articleOrder2.setQuantity(4);
 
             ArticleOrder articleOrder3 = new ArticleOrder();
-            articleOrder3.setArticle(articleRepository.findByEan13("1278651251705"));
+            articleOrder3.setArticle(articleRepository.findByEan13("1234567890038"));
             articleOrder3.setArticleStatus(ArticleStatus.REFUSED);
             articleOrder3.setQuantity(1);
 
             ArticleOrder articleOrder4 = new ArticleOrder();
-            articleOrder4.setArticle(articleRepository.findByEan13("1278651251706"));
+            articleOrder4.setArticle(articleRepository.findByEan13("1234567890040"));
             articleOrder4.setArticleStatus(ArticleStatus.DELIVERED);
             articleOrder4.setQuantity(1);
 
             ArticleOrder articleOrder5 = new ArticleOrder();
-            articleOrder5.setArticle(articleRepository.findByEan13("1278651251707"));
+            articleOrder5.setArticle(articleRepository.findByEan13("1234567890046"));
             articleOrder5.setArticleStatus(ArticleStatus.DELIVERED);
             articleOrder5.setQuantity(1);
 
             ArticleOrder articleOrder6 = new ArticleOrder();
-            articleOrder6.setArticle(articleRepository.findByEan13("1278651251708"));
+            articleOrder6.setArticle(articleRepository.findByEan13("1234567890051"));
             articleOrder6.setArticleStatus(ArticleStatus.DELIVERED);
             articleOrder6.setQuantity(1);
 
             ArticleOrder articleOrder7 = new ArticleOrder();
-            articleOrder7.setArticle(articleRepository.findByEan13("1278651251709"));
+            articleOrder7.setArticle(articleRepository.findByEan13("1234567890054"));
             articleOrder7.setArticleStatus(ArticleStatus.RETURNED);
             articleOrder7.setQuantity(7);
 
@@ -85,17 +85,17 @@ public class OrderMockDao implements OrderDao {
         }
         {
             ArticleOrder articleOrder = new ArticleOrder();
-            articleOrder.setArticle(articleRepository.findByEan13("1278651251702"));
+            articleOrder.setArticle(articleRepository.findByEan13("1234567890046"));
             articleOrder.setArticleStatus(ArticleStatus.DELIVERED);
             articleOrder.setQuantity(2);
 
             ArticleOrder articleOrder1 = new ArticleOrder();
-            articleOrder1.setArticle(articleRepository.findByEan13("1278651251708"));
+            articleOrder1.setArticle(articleRepository.findByEan13("1234567890048"));
             articleOrder1.setArticleStatus(ArticleStatus.REFUSED);
             articleOrder1.setQuantity(1);
 
             ArticleOrder articleOrder2 = new ArticleOrder();
-            articleOrder2.setArticle(articleRepository.findByEan13("1278651251709"));
+            articleOrder2.setArticle(articleRepository.findByEan13("1234567890050"));
             articleOrder2.setArticleStatus(ArticleStatus.RETURNED);
             articleOrder2.setQuantity(6);
 

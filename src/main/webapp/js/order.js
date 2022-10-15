@@ -9,7 +9,7 @@ $(function() {
     manageSearch();
 });
 function manageSearch() {
-    $("#searchOrder").on('click', () => loadTable());
+    $("#searchOrder").on('click', () => loadTable($("#orderNumber")[0].value));
     $("#orderNumber").on('keyup', function (e) {
         if (e.key === 'Enter' || e.keyCode === 13) {
             loadTable($("#orderNumber")[0].value);
