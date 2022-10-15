@@ -1,5 +1,8 @@
 package fr.eservices.drive.mock;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.*;
 
@@ -13,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.criteria.CriteriaBuilder;
+
 
 @Component
 @Qualifier("mock")
@@ -22,7 +27,7 @@ public class OrderMockDao implements OrderDao {
 
     ArticleRepository articleRepository;
 
-    public OrderMockDao(ArticleRepository articleRepository) {
+    public OrderMockDao(ArticleRepository articleRepository) throws ParseException {
         this.articleRepository = articleRepository;
         {
             ArticleOrder articleOrder = new ArticleOrder();
@@ -75,6 +80,34 @@ public class OrderMockDao implements OrderDao {
             order.setDeliveredOn(Date.from(Instant.now()));
             order.setArticlesOrder(articles);
             order.setId("1");
+
+            orders.put(order.getId(), order);
+        }
+        {
+            ArticleOrder articleOrder = new ArticleOrder();
+            articleOrder.setArticle(articleRepository.findByEan13("1278651251702"));
+            articleOrder.setArticleStatus(ArticleStatus.DELIVERED);
+            articleOrder.setQuantity(2);
+
+            ArticleOrder articleOrder1 = new ArticleOrder();
+            articleOrder1.setArticle(articleRepository.findByEan13("1278651251708"));
+            articleOrder1.setArticleStatus(ArticleStatus.REFUSED);
+            articleOrder1.setQuantity(1);
+
+            ArticleOrder articleOrder2 = new ArticleOrder();
+            articleOrder2.setArticle(articleRepository.findByEan13("1278651251709"));
+            articleOrder2.setArticleStatus(ArticleStatus.RETURNED);
+            articleOrder2.setQuantity(6);
+
+            List<ArticleOrder> articles =
+                    new ArrayList<>(Arrays.asList(articleOrder, articleOrder1,
+                            articleOrder2));
+
+            Order order = new Order();
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+            order.setDeliveredOn(formatter.parse("07-10-2022"));
+            order.setArticlesOrder(articles);
+            order.setId("2");
 
             orders.put(order.getId(), order);
         }

@@ -6,6 +6,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @Entity
 public class ArticleOrder {
@@ -21,6 +26,20 @@ public class ArticleOrder {
     private Article article;
 
     private ArticleStatus articleStatus;
+
+    public boolean canReturn(Date date) {
+        System.out.println(date);
+        if(article.isPerishable() || articleStatus.equals(ArticleStatus.BACK_TO_STOCK) || articleStatus.equals(ArticleStatus.DELIVERED)) {
+            return false;
+        }
+
+        if(articleStatus.equals(ArticleStatus.REFUSED)) return true;
+
+        long diffInMillies = Math.abs(Date.from(Instant.now()).getTime() - date.getTime());
+        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+
+        return diff <= 7;
+    }
 
     public String getId() {
         return id;

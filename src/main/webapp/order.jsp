@@ -10,7 +10,7 @@
 
 <input id="orderNumber" type="text" placeholder="Numéro de commande" />
 <button id="searchOrder">Chercher</button>
-
+<div id="orderTable"></div>
 <%
     jsList.add("order.js");
 %>

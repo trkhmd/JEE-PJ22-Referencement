@@ -21,7 +21,7 @@
     <h2>Commande : <c:out value="${order.id}"/></h2>
     <h3>
         <fmt:setLocale value="fr_FR"/>
-        <fmt:formatDate value="${order.deliveredOn}" pattern="d-M-YY"/>
+        Date de livraison : <fmt:formatDate value="${order.deliveredOn}" pattern="d-M-YY"/>
     </h3>
 
     <table class="table table-bordered table-striped table-hover">
@@ -46,7 +46,11 @@
                     </c:when>
                     <c:otherwise>
                         <td>Non</td>
-                        <td><span class="glyphicon glyphicon-plus-sign addStock" data-ref="${articleOrder.article.ean13}" data-qty="${articleOrder.quantity}" data-order="${order.id}"></span></td>
+                        <td>
+                            <c:if test="${articleOrder.canReturn(order.deliveredOn)}">
+                            <button class="glyphicon glyphicon-plus-sign addStock" data-ref="${articleOrder.article.ean13}" data-qty="${articleOrder.quantity}" data-order="${order.id}"></button>
+                            </c:if>
+                        </td>
                     </c:otherwise>
                 </c:choose>
             </tr>

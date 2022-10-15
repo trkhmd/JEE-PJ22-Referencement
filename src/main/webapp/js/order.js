@@ -22,7 +22,7 @@ function loadTable(id) {
     $.ajax({
         url: "order/"+ id + ".html",
     }).done(function (data) {
-        JSON.stringify( $('#container').html(data));
+        JSON.stringify( $('#orderTable').html(data));
         loadOnClick();
     });
 }

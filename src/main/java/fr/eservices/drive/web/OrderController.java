@@ -14,6 +14,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+
 @Controller
 @RequestMapping(path = "/order")
 public class OrderController {
@@ -35,7 +42,7 @@ public class OrderController {
 
     @ResponseBody
     @PutMapping(path = "/{id}/{articleId}.json", produces = "application/json")
-    public SimpleResponse modifyOrder(@PathVariable(name = "id") String id, @PathVariable(name = "articleId") String articleId) {
+    public SimpleResponse modifyOrder(@PathVariable(name = "id") String id, @PathVariable(name = "articleId") String articleId) throws ParseException {
         SimpleResponse simpleResponse = new SimpleResponse();
         Order order = orderDao.findById(id);
         if(order == null) {
@@ -56,6 +63,25 @@ public class OrderController {
             simpleResponse.message = "Article order not found or is perishable";
             simpleResponse.status = SimpleResponse.Status.ERROR;
             return simpleResponse;
+        }
+
+        if(ao.getArticleStatus().equals(ArticleStatus.DELIVERED) || ao.getArticleStatus().equals(ArticleStatus.BACK_TO_STOCK)) {
+            simpleResponse.message = "Article order can't go back to stock";
+            simpleResponse.status = SimpleResponse.Status.ERROR;
+            return simpleResponse;
+        }
+
+        if(ao.getArticleStatus().equals(ArticleStatus.RETURNED)) {
+            Date firstDate = order.getDeliveredOn();
+
+            long diffInMillies = Math.abs(Date.from(Instant.now()).getTime() - firstDate.getTime());
+            long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+
+            if(diff > 7) {
+                simpleResponse.message = "Article order can't go back to stock due to too late return";
+                simpleResponse.status = SimpleResponse.Status.ERROR;
+                return simpleResponse;
+            }
         }
 
         Product product = productRepository.findByArticle(ao.getArticle());
