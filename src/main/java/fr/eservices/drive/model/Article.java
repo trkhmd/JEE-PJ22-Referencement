@@ -15,6 +15,7 @@ public class Article {
 	private String img;
 	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Category> categories = new ArrayList<>();
+	private boolean isPerishable;
 
 	public String getEan13() {
 		return ean13;
@@ -62,6 +63,14 @@ public class Article {
 
 	public void setCategories(List<Category> categories) {
 		this.categories = categories;
+	}
+
+	public boolean getIsPerishable() {
+		return isPerishable;
+	}
+
+	public void setIsPerishable(boolean perishable) {
+		isPerishable = perishable;
 	}
 
 	@Override

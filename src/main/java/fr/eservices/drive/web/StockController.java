@@ -12,7 +12,6 @@ import fr.eservices.drive.web.dto.StockModifyEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +20,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 @Controller
-@RequestMapping(path="/stock")
+@RequestMapping(path="/stocks")
 public class StockController {
 
     @Autowired
@@ -41,9 +40,7 @@ public class StockController {
         PrintWriter w = new PrintWriter( out );
         ex.printStackTrace(w);
         w.close();
-        return
-                "ERROR"
-                        + "<!--\n" + out.toString() + "\n-->";
+        return "ERROR"+ "<!--\n" + out.toString() + "\n-->";
     }
 
     /**
@@ -53,8 +50,8 @@ public class StockController {
      */
     @GetMapping
     public String getAllStock(Model model) {
-        List<Product> products = productRepository.findAll();
-        List<Perishable> perishables = perishableRepository.findAll();
+        List<Product> products = productRepository.findAllByOrderByArticle();
+        List<Perishable> perishables = perishableRepository.findAllByOrderByArticle();
         model.addAttribute("products", products);
         model.addAttribute("perishables", perishables);
         return "_stocks";
@@ -66,7 +63,8 @@ public class StockController {
      * @param stockEntry new quantity
      * @return HTTP.reponse
      */
-    @PutMapping(path="/{id}",consumes="application/json")
+    @ResponseBody
+    @PutMapping(path="/{id}.json",consumes="application/json")
     public SimpleResponse modify(@PathVariable String id, @RequestBody StockModifyEntry stockEntry) {
         SimpleResponse res = new SimpleResponse();
         String trimmedId = id.trim();
@@ -88,17 +86,6 @@ public class StockController {
         return res;
     }
 
-
-    /**
-     *
-     * @param id Stock id
-     * @return HTTP.response
-     */
-    @GetMapping(value = "/{id}.html",produces="text/html")
-    public String getStock(@PathVariable String id, Model model) {
-        stockRepository.findById(id);
-        return "_stocks";
-    }
     @ResponseBody
     @DeleteMapping(value="/{id}.json")
     public SimpleResponse deleteStock(@PathVariable String id) {

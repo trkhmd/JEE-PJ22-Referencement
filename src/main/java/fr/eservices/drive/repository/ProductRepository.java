@@ -7,7 +7,10 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface ProductRepository extends CrudRepository<Product, String> {
+
     Product findById(String id);
     Product findByArticle(Article article);
     List<Product> findAll();
+    List<Product> findAllByOrderByArticle();
+    
 }

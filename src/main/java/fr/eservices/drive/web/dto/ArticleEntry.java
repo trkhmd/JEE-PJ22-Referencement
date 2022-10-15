@@ -6,6 +6,7 @@ import java.util.List;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class ArticleEntry {
@@ -21,6 +22,10 @@ public class ArticleEntry {
     @NotEmpty(message = "*Name is required")
     private String name;
     private String img;
+    @NotNull
+    private boolean isPerishable;
+    @Min(value = 0, message = "*Quantity must be positive")
+    private int quantity;
     private List<String> categories = new ArrayList<>();
 
     public String getEan13() {
@@ -69,5 +74,21 @@ public class ArticleEntry {
 
     public void setCategories(List<String> categories) {
         this.categories = categories;
+    }
+
+    public boolean getIsPerishable() {
+        return isPerishable;
+    }
+
+    public void setIsPerishable(boolean isPerishable) {
+        this.isPerishable = isPerishable;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

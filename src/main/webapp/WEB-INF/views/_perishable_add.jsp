@@ -47,7 +47,6 @@
             <form:input type="number" id="quantity" path="quantity" class="form-control" />
         </div>
 
-        //button
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Ajouter</button>
         </div>
