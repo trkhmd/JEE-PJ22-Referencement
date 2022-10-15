@@ -107,7 +107,7 @@ public class ArticleController {
             return "add_article";
         }
         articleRepository.save(article);
-        if (!article.getIsPerishable() && entry.getQuantity() > 0) {
+        if (!article.isPerishable() && entry.getQuantity() > 0) {
             Product product = new Product();
             product.setArticle(article);
             product.setQuantity(entry.getQuantity());
@@ -149,7 +149,7 @@ public class ArticleController {
         }
         Article article = createArticleFromArticleEntry(entry);
         articleRepository.save(article);
-        if( !article.getIsPerishable() && entry.getQuantity() >= 0 )
+        if( !article.isPerishable() && entry.getQuantity() >= 0 )
         {
             Product product = productRepository.findByArticle(article);
             if( product == null )
@@ -208,9 +208,9 @@ public class ArticleController {
         entry.setName(article.getName());
         entry.setPrice(article.getPrice());
         entry.setVat(article.getVat());
-        entry.setIsPerishable(article.getIsPerishable());
+        entry.setIsPerishable(article.isPerishable());
         entry.setImg(article.getImg());
-        if( !article.getIsPerishable() )
+        if( !article.isPerishable() )
         {
             Product product = productRepository.findByArticle(article);
             if( product != null )

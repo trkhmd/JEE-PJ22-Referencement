@@ -65,7 +65,7 @@ public class Article {
 		this.categories = categories;
 	}
 
-	public boolean getIsPerishable() {
+	public boolean isPerishable() {
 		return isPerishable;
 	}
 

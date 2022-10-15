@@ -21,7 +21,7 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
 @Configuration
 @EnableJpaRepositories(basePackages="fr.eservices.drive.repository")
-@ComponentScan(basePackages={"fr.eservices.drive.web","fr.eservices.drive.model"})
+@ComponentScan(basePackages={"fr.eservices.drive.web","fr.eservices.drive.mock"})
 @EnableWebMvc
 public class AppConfig implements WebApplicationInitializer {
 	

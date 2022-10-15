@@ -36,6 +36,7 @@ java.util.List<String> jsList = new java.util.ArrayList<>();
         <li><a href="<%= ctxPath %>/articles.html">Articles</a></li>
         <li><a href="<%= ctxPath %>/stocks.jsp">Stock</a></li>
         <li><a href="<%= ctxPath %>/perished.jsp">Perished</a></li>
+        <li><a href="<%= ctxPath %>/order.jsp">Commandes</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
