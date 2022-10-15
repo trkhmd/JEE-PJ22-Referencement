@@ -50,11 +50,11 @@ public class StockController {
      */
     @GetMapping
     public String getAllStock(Model model) {
-        List<Product> products = productRepository.findAll();
-        List<Perishable> perishables = perishableRepository.findAllByOrderByBestBefore();
+        List<Product> products = productRepository.findAllByOrderByArticle();
+        List<Perishable> perishables = perishableRepository.findAllByOrderByArticle();
         model.addAttribute("products", products);
         model.addAttribute("perishables", perishables);
-        return "stocks";
+        return "_stocks";
     }
 
     /**
@@ -63,7 +63,8 @@ public class StockController {
      * @param stockEntry new quantity
      * @return HTTP.reponse
      */
-    @PutMapping(path="/{id}",consumes="application/json")
+    @ResponseBody
+    @PutMapping(path="/{id}.json",consumes="application/json")
     public SimpleResponse modify(@PathVariable String id, @RequestBody StockModifyEntry stockEntry) {
         SimpleResponse res = new SimpleResponse();
         String trimmedId = id.trim();
@@ -85,17 +86,6 @@ public class StockController {
         return res;
     }
 
-
-    /**
-     *
-     * @param id Stock id
-     * @return HTTP.response
-     */
-    @GetMapping(value = "/{id}.html",produces="text/html")
-    public String getStock(@PathVariable String id, Model model) {
-        stockRepository.findById(id);
-        return "_stocks";
-    }
     @ResponseBody
     @DeleteMapping(value="/{id}.json")
     public SimpleResponse deleteStock(@PathVariable String id) {

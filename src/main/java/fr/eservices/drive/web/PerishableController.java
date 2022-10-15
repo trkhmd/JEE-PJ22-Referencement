@@ -12,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.time.Instant;
@@ -55,6 +57,7 @@ public class PerishableController {
         List<Perishable> perishables = perishableRepository.findAll();
         List<Perishable> perishedList = new ArrayList<>();
         for(Perishable perishable : perishables) {
+            System.out.println("BESTBEFORE:" + perishable.getBestBefore().toString());
             if(perishable.getBestBefore().before(Date.from(Instant.now()))) {
                 perishedList.add(perishable);
             }
@@ -80,59 +83,70 @@ public class PerishableController {
         return "_perishable_info";
     }
 
-     @ResponseBody
-     @PostMapping(path="/add.json",consumes="application/json")
-     public SimpleResponse add(@RequestBody PerishableEntry perishableEntry) {
-         SimpleResponse res = new SimpleResponse();
-         if (perishableEntry.getEan13() == null ||
-                 perishableEntry.getBestBefore() == null ||
-                 perishableEntry.getLot() == null){
-             res.status =  SimpleResponse.Status.ERROR;
-             res.message = "Bad request verify entry";
-             return res;
-         }
-         String trimmedEan13 = perishableEntry.getEan13().trim();
-         String trimmedLot = perishableEntry.getLot().trim();
+    @GetMapping(path = "/add.html", produces="text/html")
+    //Show the form to add a new perishable
+    public ModelAndView add(Model model) {
+        return new ModelAndView("_perishable_add", "PerishableEntry", new PerishableEntry());
+    }
 
-         Article article = articleRepository.findByEan13(trimmedEan13);
-         if(article == null) {
-             res.status =  SimpleResponse.Status.ERROR;
-             res.message = "Article couldn't be find with this Ean13:"+ trimmedEan13;
-             return res;
-         }
+    @ResponseBody
+    @PostMapping( path = "/add.json", consumes="application/json", produces="application/json")
+    public SimpleResponse add(@Valid @RequestBody PerishableEntry perishableEntry) {
+        SimpleResponse res = new SimpleResponse();
+        if (perishableEntry.getEan13() == null ||
+                perishableEntry.getBestBefore() == null ||
+                perishableEntry.getLot() == null ) {
+            res.status =  SimpleResponse.Status.ERROR;
+            res.message = "Bad request verify entry";
 
-         if(trimmedLot.length() <3){
-             res.status =  SimpleResponse.Status.ERROR;
-             res.message = "Lot is too short";
-             return res;
-         }
+            return res;
+        }
+        System.out.println(perishableEntry.getBestBefore());
+        System.out.println(perishableEntry.getQuantity());
+        String trimmedEan13 = perishableEntry.getEan13().trim();
+        String trimmedLot = perishableEntry.getLot().trim();
+        System.out.println(trimmedEan13);
 
-         if(perishableEntry.getQuantity() <= 0){
-             res.status =  SimpleResponse.Status.ERROR;
-             res.message = "Quantity cannont be lower than 1";
-             return res;
-         }
+        Article article = articleRepository.findByEan13(trimmedEan13);
 
-         List<Perishable> perishables = perishableRepository.findByArticle(article);
-         for(Perishable perishable: perishables) {
-             if(perishable.getLot().equals(trimmedLot)) {
-                 res.status =  SimpleResponse.Status.ERROR;
-                 res.message = "This lot is already registered, cannot be added more than once. Try to modify the existing quantity";
-                 return res;
-             }
-         }
+        if(article == null) {
+            res.status =  SimpleResponse.Status.ERROR;
+            res.message = "Article couldn't be find with this Ean13:"+ trimmedEan13;
+            return res;
+        }
 
-         Perishable perishable = new Perishable();
-         // perishable.setArticle(article);
-         perishable.setLot(trimmedLot);
-         perishable.setBestBefore(perishableEntry.getBestBefore());
-         // perishable.setQuantity(perishableEntry.getQuantity());
+        if(trimmedLot.length() <3){
+            res.status =  SimpleResponse.Status.ERROR;
+            res.message = "Lot is too short";
+            return res;
+        }
 
-         perishableRepository.save(perishable);
-         res.status = SimpleResponse.Status.OK;
-         res.message = "Perishable added";
-         return res;
-     }
+        if(perishableEntry.getQuantity() <= 0){
+            res.status =  SimpleResponse.Status.ERROR;
+            res.message = "Quantity cannont be lower than 1";
+            return res;
+        }
 
+        List<Perishable> perishables = perishableRepository.findByArticle(article);
+        for(Perishable perishable: perishables) {
+            if(perishable.getLot().equals(trimmedLot)) {
+                res.status =  SimpleResponse.Status.ERROR;
+                res.message = "This lot is already registered, cannot be added more than once. Try to modify the existing quantity";
+                return res;
+            }
+        }
 
+        Perishable perishable = new Perishable();
+        perishable.setArticle(article);
+        perishable.setLot(trimmedLot);
+        perishable.setBestBefore(perishableEntry.getBestBefore());
+        perishable.setQuantity(perishableEntry.getQuantity());
+
+        System.out.println("save perishable " + perishable.getLot());
+
+        perishableRepository.save(perishable);
+        res.status = SimpleResponse.Status.OK;
+        res.message = "Perishable added";
+        return res;
+    }
 }

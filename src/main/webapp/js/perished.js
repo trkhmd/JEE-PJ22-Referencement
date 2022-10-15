@@ -24,7 +24,7 @@ function loadOnClick() {
         var ref = $(this).data("ref");
         $.ajax({
             method: 'DELETE',
-            url: "stock/"+ ref + ".json",
+            url: "stocks/"+ ref + ".json",
             dataType: "json"
         }).done(function (data) {
             if(data['status'] === 'OK') {

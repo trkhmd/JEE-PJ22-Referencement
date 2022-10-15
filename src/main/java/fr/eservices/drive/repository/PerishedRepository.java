@@ -11,6 +11,6 @@ public interface PerishedRepository extends CrudRepository<Perishable,String> {
     List<Perishable> findAll();
     List<Perishable> findByArticle(Article article);
     Perishable findById(String id);
-    List<Perishable> findAllByOrderByBestBefore();
+    List<Perishable> findAllByOrderByArticle();
 
 }
