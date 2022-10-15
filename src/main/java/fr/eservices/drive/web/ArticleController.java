@@ -3,8 +3,10 @@ package fr.eservices.drive.web;
 import fr.eservices.drive.dao.DataException;
 import fr.eservices.drive.model.Article;
 import fr.eservices.drive.model.Category;
+import fr.eservices.drive.model.Product;
 import fr.eservices.drive.repository.ArticleRepository;
 import fr.eservices.drive.repository.CategoryRepository;
+import fr.eservices.drive.repository.ProductRepository;
 import fr.eservices.drive.web.dto.ArticleEntry;
 import fr.eservices.drive.web.dto.CategoryForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,9 @@ public class ArticleController {
 
     @Autowired
     CategoryRepository categoryRepository;
+
+    @Autowired
+    ProductRepository productRepository;
 
     @ExceptionHandler(DataException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -156,6 +161,7 @@ public class ArticleController {
         article.setName(entry.getName());
         article.setPrice(entry.getPrice());
         article.setVat(entry.getVat());
+        article.setIsPerishable(entry.getIsPerishable());
         article.setImg(entry.getImg());
         for(String catId : entry.getCategories()) {
             article.getCategories().add(categoryRepository.findById(catId));
@@ -186,6 +192,12 @@ public class ArticleController {
             return "add_article";
         }
         articleRepository.save(article);
+        if( !article.getIsPerishable() && entry.getQuantity() > 0 ) {
+            Product product = new Product();
+            product.setArticle(article);
+            product.setQuantity(entry.getQuantity());
+            productRepository.save(product);
+        }
         atts.addFlashAttribute("success_alert", "Article added successfully");
         return "redirect:/articles/edit/" + article.getEan13()+".html";
     }
