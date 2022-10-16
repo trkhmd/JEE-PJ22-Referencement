@@ -114,6 +114,11 @@ public class PerishableController {
             res.message = "Article couldn't be find with this Ean13:"+ trimmedEan13;
             return res;
         }
+        if(!article.isPerishable()) {
+            res.status =  SimpleResponse.Status.ERROR;
+            res.message = "This article is not perishable: " + article.getName();
+            return res;
+        }
 
         if(trimmedLot.length() <3){
             res.status =  SimpleResponse.Status.ERROR;

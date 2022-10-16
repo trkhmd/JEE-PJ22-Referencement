@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@include file="/WEB-INF/views/_header.jsp" %>
+<%@include file="/WEB-INF/views/_header_employee.jsp" %>
 
 <input id="orderNumber" type="text" placeholder="Numéro de commande" />
 <button id="searchOrder">Chercher</button>
