@@ -33,7 +33,7 @@ java.util.List<String> jsList = new java.util.ArrayList<>();
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li><a href="<%= ctxPath %>/client.html">Drive</a></li>
+        <li><a href="<%= ctxPath %>/client.jsp">Drive</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">

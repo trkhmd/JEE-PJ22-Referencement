@@ -7,8 +7,17 @@ $(function() {
     link.media = 'all';
     document.getElementsByTagName('head')[0].appendChild(link);
     loadCart();
-    loadOnClick();
+    loadTable();
 });
+
+function loadTable() {
+    $.ajax({
+        url: "client.html",
+    }).done(function (data) {
+        JSON.stringify( $('#content').html(data) )
+        loadOnClick();
+    });
+}
 
 function loadOnClick() {
     $(".addArticle").click( function(e) {
@@ -20,8 +29,9 @@ function loadOnClick() {
             contentType: 'application/json',
             data: JSON.stringify( {stockId: ref, quantity: 1} )
         }).done(function (data) {
-            console.log(data);
-            loadCart();
+            if(data['status'] === 'OK') {
+                loadCart();
+            }
         });
     });
 
@@ -33,15 +43,29 @@ function loadCart() {
         url: "cart.html"
     }).done(function(data){
         JSON.stringify( $('#cartInHeader').html(data) )
-        $(".validate").click( function(e) {
-            $.ajax({
-                method: 'GET',
-                url: "cart/validate.json",
-                contentType: 'application/json',
-            }).done(function (data) {
-                console.log(data);
-            });
-        });
+        validate();
     });
 }
 
+function validate() {
+    $(".validate").click( function(e) {
+        $.ajax({
+            method: 'GET',
+            url: "cart/validate.json",
+            contentType: 'application/json',
+        }).done(function (data) {
+            JSON.stringify( $('#alert').html(data['message']) )
+            loadTable();
+            loadCart();
+        });
+    });
+    $(".clear").click( function(e) {
+        $.ajax({
+            method: 'POST',
+            url: "cart/clear.json",
+            contentType: 'application/json',
+        }).done(function (data) {
+            loadCart();
+        });
+    });
+}

@@ -39,6 +39,16 @@ public class CartController {
     }
 
     @ResponseBody
+    @PostMapping( path = "/clear.json", produces="application/json")
+    public SimpleResponse clear() {
+        SimpleResponse res = new SimpleResponse();
+        cartDao.clear();
+        res.message = "";
+        res.status = SimpleResponse.Status.OK;
+        return res;
+    }
+
+    @ResponseBody
     @PostMapping( path = "/add.json", consumes="application/json", produces="application/json")
     public SimpleResponse add(@RequestBody ArticleCart articleCart) {
         SimpleResponse res = new SimpleResponse();
@@ -107,9 +117,9 @@ public class CartController {
             stock.setQuantity(stock.getQuantity() - articleCart.getQuantity());
             stockRepository.save(stock);
         }
-        orderDao.createOrder(articleOrderList);
+        String id = orderDao.createOrder(articleOrderList);
         cartDao.clear();
-        res.message = "";
+        res.message = "Your order n°"+ id + " has been created";
         res.status = SimpleResponse.Status.OK;
         return res;
     }

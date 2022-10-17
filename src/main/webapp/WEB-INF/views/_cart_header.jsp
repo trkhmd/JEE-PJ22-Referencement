@@ -14,3 +14,4 @@ Panier
     </c:if>
 </pre>
 <button class="btn btn-primary validate">Commander</button>
+<button class="btn btn-primary clear">Clear</button>

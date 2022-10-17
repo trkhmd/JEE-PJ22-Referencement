@@ -20,7 +20,7 @@
     <a href="<%= ctxPath %>/articles.html">
         <button class="btn btn-primary" style=" margin: 5px;" >Admin</button>
     </a>
-    <a href="<%= ctxPath %>/client.html">
+    <a href="<%= ctxPath %>/client.jsp">
         <button style="background-color: #d58512; color:white; margin: 5px;" class="btn" href=>Client</button>
     </a>
     <a href="<%= ctxPath %>/order.jsp">

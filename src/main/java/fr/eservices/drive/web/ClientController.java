@@ -62,7 +62,7 @@ public class ClientController {
                 .collect(Collectors.toList());
         model.addAttribute("products", products);
         model.addAttribute("perishables", afterFiveDays);
-        return "page_client";
+        return "_client";
     }
 
 }
