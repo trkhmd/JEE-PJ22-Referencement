@@ -28,7 +28,7 @@ java.util.List<String> jsList = new java.util.ArrayList<>();
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#"><span class="glyphicon glyphicon-barcode"></span>
+      <a class="navbar-brand" href="<%= ctxPath %>/"><span class="glyphicon glyphicon-barcode"></span>
        My Web Drive</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
@@ -36,26 +36,6 @@ java.util.List<String> jsList = new java.util.ArrayList<>();
         <li><a href="<%= ctxPath %>/articles.html">Articles</a></li>
         <li><a href="<%= ctxPath %>/stocks.jsp">Stock</a></li>
         <li><a href="<%= ctxPath %>/perished.jsp">Perished</a></li>
-        <li><a href="<%= ctxPath %>/order.jsp">Commandes</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-          	<span class="glyphicon glyphicon-user"></span> Mon compte <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href=""><span class="glyphicon glyphicon-log-in"></span> Inscription</a></li>
-            <li><a href=""><span class="glyphicon glyphicon-off"></span> Déconnexion</a></li>
-          </ul>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-          	<span class="glyphicon glyphicon-shopping-cart"></span> Panier <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li id="cartInHeader">
-              <!-- This part is replaced with an ajax call -->
-            </li>
-          </ul>
-        </li>
       </ul>
     </div><!--/.nav-collapse -->
   </div>
