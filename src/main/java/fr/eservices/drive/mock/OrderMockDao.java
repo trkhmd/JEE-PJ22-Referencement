@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.*;
 
+import com.sun.org.apache.xpath.internal.operations.Or;
 import fr.eservices.drive.dao.OrderDao;
 import fr.eservices.drive.model.Article;
 import fr.eservices.drive.model.ArticleOrder;
@@ -24,6 +25,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 public class OrderMockDao implements OrderDao {
 
     private HashMap<String, Order> orders = new HashMap<>();
+    private int orderNumber = 2;
 
     ArticleRepository articleRepository;
 
@@ -127,4 +129,17 @@ public class OrderMockDao implements OrderDao {
             }
         }
     }
+
+    @Override
+    public String createOrder(List<ArticleOrder> articleOrder) {
+        Order order = new Order();
+        order.setDeliveredOn(Date.from(Instant.now()));
+        order.setArticlesOrder(articleOrder);
+        orderNumber++;
+        order.setId(Integer.toString(orderNumber));
+        orders.put(order.getId(), order);
+        return order.getId();
+    }
+
+
 }

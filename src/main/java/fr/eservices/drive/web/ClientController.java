@@ -17,7 +17,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(path="/client")
@@ -52,8 +56,12 @@ public class ClientController {
     public String getAllAvailableArticles(Model model) {
         List<Product> products = productRepository.findAllByOrderByArticle();
         List<Perishable> perishables = perishableRepository.findAllByOrderByArticle();
+        Date today = new Date();
+        Date fiveDays = new Date(today.getTime() + (1000 * 60 * 60 * 24 * 5));
+        List<Perishable> afterFiveDays = perishables.stream().filter(p -> p.getBestBefore().after(fiveDays))
+                .collect(Collectors.toList());
         model.addAttribute("products", products);
-        model.addAttribute("perishables", perishables);
+        model.addAttribute("perishables", afterFiveDays);
         return "page_client";
     }
 
