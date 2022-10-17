@@ -11,7 +11,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="fr.eservices.drive.web.dto.PerishableEntry" %>
-<%@ include file="_header.jsp"%>
+<%@ include file="_header_admin.jsp"%>
 
 <html>
 <head>
