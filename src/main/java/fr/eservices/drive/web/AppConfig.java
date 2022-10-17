@@ -31,7 +31,7 @@ public class AppConfig implements WebApplicationInitializer {
 		ctx.register(AppConfig.class);
 		ServletRegistration.Dynamic registration = container.addServlet("dispatcher", new DispatcherServlet(ctx));
 		registration.setLoadOnStartup(1);
-		registration.addMapping("*.html", "*.json", "/");
+		registration.addMapping("*.html", "*.json");
 	}
 	
 	@Bean

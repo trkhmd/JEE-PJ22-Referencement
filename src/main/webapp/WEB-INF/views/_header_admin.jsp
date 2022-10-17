@@ -28,7 +28,7 @@ java.util.List<String> jsList = new java.util.ArrayList<>();
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#"><span class="glyphicon glyphicon-barcode"></span>
+      <a class="navbar-brand" href="<%= ctxPath %>/"><span class="glyphicon glyphicon-barcode"></span>
        My Web Drive</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
