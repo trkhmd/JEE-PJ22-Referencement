@@ -36,12 +36,11 @@ public class ClientArticleController {
      * Returns a list of items available, if perishable articles display the ones
      * which have expiration date greater than 5 days and quantity of each item.
      * @param model
-     * @param req
      * @return list of available items
      */
 
     @GetMapping()
-    public String getAllAvailableArticles(Model model, HttpServletResponse req, HttpServletRequest request) {
+    public String getAllAvailableArticles(Model model) {
 
         List<Stock> res = stockRepository.findAll();
         List<Stock> stocks = new ArrayList<>();
@@ -52,7 +51,7 @@ public class ClientArticleController {
                 DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
                 Calendar dayPlusFiveDays = Calendar.getInstance();
                 dayPlusFiveDays.add(Calendar.DATE, 5);
-                if (((Perishable) stock).getBestBefore().before(dayPlusFiveDays.getTime()) && stock.getQuantity()>0)
+                if (((Perishable) stock).getBestBefore().after(dayPlusFiveDays.getTime()) && stock.getQuantity()>0)
                     stocks.add(stock);
                 }
 
