@@ -15,7 +15,7 @@
     <th>Lot</th>
     <th>DLC</th>
     <th>Quantity</th>
-    <th>Actions</th>
+    <th>Modifier le stock</th>
   </tr>
   <c:choose>
     <c:when test="${empty products and empty perishables}">
@@ -30,7 +30,14 @@
       <td>${stock.article.name}</td>
       <td colspan="2"></td>
       <td>${stock.quantity}</td>
-      <td><span class="glyphicon glyphicon-plus-sign addStock" data-ref="${stock.id}" data-quantity="${stock.quantity}"></span><span class="glyphicon glyphicon-minus-sign removeStock" data-ref="${stock.id}" data-quantity="${stock.quantity}"></span></td>
+      <td>
+        <button type="button" class="btn btn-primary btn-sm addStock" data-ref="${stock.id}" data-quantity="${stock.quantity}">
+          <span class="glyphicon glyphicon-plus-sign"></span>
+        </button>
+        <button type="button" class="btn btn-danger btn-sm removeStock" data-ref="${stock.id}" data-quantity="${stock.quantity}">
+          <span class="glyphicon glyphicon-minus-sign"></span>
+        </button>
+      </td>
     </tr>
   </c:forEach>
   <c:forEach items="${perishables}" var="stock">
@@ -40,7 +47,14 @@
       <td>${stock.lot}</td>
       <td>${stock.bestBefore}</td>
       <td>${stock.quantity}</td>
-      <td><span class="glyphicon glyphicon-plus-sign addStock" data-ref="${stock.id}" data-quantity="${stock.quantity}"> </span><span class="glyphicon glyphicon-minus-sign removeStock" data-ref="${stock.id}" data-quantity="${stock.quantity}"></span></td>
+      <td>
+        <button type="button" class="btn btn-primary btn-sm addStock" data-ref="${stock.id}" data-quantity="${stock.quantity}">
+          <span class="glyphicon glyphicon-plus-sign"></span>
+        </button>
+        <button type="button" class="btn btn-danger btn-sm removeStock" data-ref="${stock.id}" data-quantity="${stock.quantity}">
+          <span class="glyphicon glyphicon-minus-sign"></span>
+        </button>
+      </td>
     </tr>
   </c:forEach>
 </table>
