@@ -105,17 +105,20 @@ public class CartController {
             }
             ArticleOrder articleOrder = new ArticleOrder();
             articleOrder.setArticle(stock.getArticle());
-            articleOrder.setArticleStatus(ArticleStatus.DELIVERED);
+            articleOrder.setArticleStatus(ArticleStatus.BEING_PREPARED);
             articleOrder.setQuantity(articleCart.getQuantity());
             articleOrderList.add(articleOrder);
         }
         for(ArticleCart articleCart : cartDao.getCartContent()) {
             Stock stock = stockRepository.findById(articleCart.getStockId());
+            System.out.println((stock.getQuantity() - articleCart.getQuantity()) + " quantity");
             if(stock.getQuantity() - articleCart.getQuantity() == 0) {
                 stockRepository.delete(stock);
             }
-            stock.setQuantity(stock.getQuantity() - articleCart.getQuantity());
-            stockRepository.save(stock);
+            else {
+                stock.setQuantity(stock.getQuantity() - articleCart.getQuantity());
+                stockRepository.save(stock);
+            }
         }
         String id = orderDao.createOrder(articleOrderList);
         cartDao.clear();

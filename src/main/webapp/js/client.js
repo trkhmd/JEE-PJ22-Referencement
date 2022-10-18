@@ -31,6 +31,7 @@ function loadOnClick() {
         }).done(function (data) {
             if(data['status'] === 'OK') {
                 loadCart();
+                loadTable();
             }
         });
     });
@@ -66,6 +67,7 @@ function validate() {
             contentType: 'application/json',
         }).done(function (data) {
             loadCart();
+            loadTable();
         });
     });
 }

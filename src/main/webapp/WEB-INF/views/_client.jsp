@@ -44,7 +44,12 @@
           </c:choose>
         </td>
         <td></td>
-        <td><span class="glyphicon glyphicon-plus-sign addArticle" data-ref="${stock.id}"></span></td>
+        <c:if test="${stock.quantity > 0}">
+          <td><span class="glyphicon glyphicon-plus-sign addArticle" data-ref="${stock.id}"></span></td>
+        </c:if>
+        <c:if test="${stock.quantity <= 0}">
+          <td></td>
+        </c:if>
       </tr>
     </c:forEach>
 
@@ -69,7 +74,12 @@
         </td>
 
         <td><c:out value="${stock.bestBefore}"/></td>
-        <td><span class="glyphicon glyphicon-plus-sign addArticle" data-ref="${stock.id}"></span></td>
+        <c:if test="${stock.quantity > 0}">
+          <td><span class="glyphicon glyphicon-plus-sign addArticle" data-ref="${stock.id}"></span></td>
+        </c:if>
+        <c:if test="${stock.quantity <= 0}">
+          <td></td>
+        </c:if>
       </tr>
     </c:forEach>
   </table>

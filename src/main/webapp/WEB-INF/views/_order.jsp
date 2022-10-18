@@ -21,7 +21,7 @@
     <h2>Commande : <c:out value="${order.id}"/></h2>
     <h3>
         <fmt:setLocale value="fr_FR"/>
-        Date de livraison : <fmt:formatDate value="${order.deliveredOn}" pattern="d-M-YY"/>
+        Date de la commande : <fmt:formatDate value="${order.deliveredOn}" pattern="d-M-YY"/>
     </h3>
 
     <table class="table table-bordered table-striped table-hover">
