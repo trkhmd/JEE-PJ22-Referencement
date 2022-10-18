@@ -14,7 +14,7 @@
 
     <div style="margin:0px; margin-bottom:10px;display:flex;justify-content:space-between;">
         <form class="form-inline">
-            <input type="hidden" value="${articels.size}" name="size" />
+            <input type="hidden" value="${articles.size}" name="size" />
             <div class="form-group">
                 <label for="category">Category</label>
                 <select class="form-control" id="category" name="cat">

@@ -29,12 +29,22 @@ java.util.List<String> jsList = new java.util.ArrayList<>();
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="<%= ctxPath %>/"><span class="glyphicon glyphicon-barcode"></span>
-       My Web Drive</a>
+        My Web Drive</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <!--TODO : REPLACE BY CLIENT PAGE-->
-        <li><a href="<%= ctxPath %>/articles.html">Articles</a></li>
+        <li><a href="<%= ctxPath %>/client.jsp">Drive</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            <span class="glyphicon glyphicon-shopping-cart"></span> Panier <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li id="cartInHeader">
+              <!-- This part is replaced with an ajax call -->
+            </li>
+          </ul>
+        </li>
       </ul>
     </div><!--/.nav-collapse -->
   </div>

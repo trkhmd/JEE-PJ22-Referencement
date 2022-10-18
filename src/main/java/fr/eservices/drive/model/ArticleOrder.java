@@ -29,7 +29,7 @@ public class ArticleOrder {
 
     public boolean canReturn(Date date) {
         System.out.println(date);
-        if(article.isPerishable() || articleStatus.equals(ArticleStatus.BACK_TO_STOCK) || articleStatus.equals(ArticleStatus.DELIVERED)) {
+        if(article.isPerishable() || articleStatus.equals(ArticleStatus.BEING_PREPARED) || articleStatus.equals(ArticleStatus.BACK_TO_STOCK) || articleStatus.equals(ArticleStatus.DELIVERED)) {
             return false;
         }
 
