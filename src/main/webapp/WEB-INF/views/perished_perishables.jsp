@@ -22,7 +22,7 @@
             <th scope="col">Nom du produit</th>
             <th scope="col">Date de péremption (DLC)</th>
             <th scope="col">N° lot</th>
-            <th scope="col">Action</th>
+            <th scope="col">Supprimer le lot</th>
         </tr>
     <c:forEach items="${perishables}" var="perished">
         <tr>
@@ -30,7 +30,11 @@
             <td><c:out value="${perished.article.name}"/></td>
             <td><c:out value="${perished.bestBefore}"/></td>
             <td><c:out value="${perished.lot}"/></td>
-            <td><span class="glyphicon glyphicon-minus-sign removeStock" data-ref="${perished.id}"></span></td>
+            <td>
+                <button type="button" class="btn btn-danger btn-sm removeStock" data-ref="${perished.id}">
+                    <span class="glyphicon glyphicon-minus-sign"></span>
+                </button>
+            </td>
         </tr>
     </c:forEach>
     </table>

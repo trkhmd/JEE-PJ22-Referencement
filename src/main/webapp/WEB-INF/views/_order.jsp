@@ -31,7 +31,7 @@
             <th scope="col">Quantité</th>
             <th scope="col">Status</th>
             <th scope="col">Produit frais</th>
-            <th scope="col">Action</th>
+            <th scope="col">Retour au stock</th>
         </tr>
         <c:forEach items="${order.articlesOrder}" var="articleOrder">
             <tr>
@@ -48,7 +48,9 @@
                         <td>Non</td>
                         <td>
                             <c:if test="${articleOrder.canReturn(order.deliveredOn)}">
-                            <button class="glyphicon glyphicon-plus-sign addStock" data-ref="${articleOrder.article.ean13}" data-qty="${articleOrder.quantity}" data-order="${order.id}"></button>
+                            <button type="button" class="btn btn-primary btn-sm addStock" data-ref="${articleOrder.article.ean13}" data-qty="${articleOrder.quantity}" data-order="${order.id}">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            </button>
                             </c:if>
                         </td>
                     </c:otherwise>
