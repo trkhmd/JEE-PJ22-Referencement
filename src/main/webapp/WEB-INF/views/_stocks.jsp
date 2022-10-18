@@ -42,7 +42,7 @@
   </c:forEach>
   <c:forEach items="${perishables}" var="stock">
     <tr>
-      <td>${stock.article.ean13}</td>
+      <td><a href="articles/edit/${stock.article.ean13}.html">${stock.article.ean13}</a></td>
       <td>${stock.article.name}</td>
       <td>${stock.lot}</td>
       <td>${stock.bestBefore}</td>

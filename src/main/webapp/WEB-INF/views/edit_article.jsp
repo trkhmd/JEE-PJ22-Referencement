@@ -19,6 +19,8 @@
     </c:if>
 
     <form:form method="POST" modelAttribute="article">
+
+    <form:hidden path="isPerishable" />
     <div class="row">
         <div class="form-group col-md-6">
             <label for="fEan">EAN</label>
@@ -44,7 +46,7 @@
         </div>
     </div>
     <div class="row">
-        <c:if test="${article.isPerishable == false}">
+        <c:if test="${not article.isPerishable}">
             <div class="form-group col-md-6">
                 <label for="fQty">Quantity</label>
                 <form:input path="quantity" type="number" class="form-control" id="fQty" placeholder="Quantity"/>
